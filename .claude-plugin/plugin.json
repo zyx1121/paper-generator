@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "paper-generator",
+  "displayName": "Paper Generator",
+  "version": "0.1.0",
+  "description": "Idea-to-paper pipeline: discuss a research idea, pick a venue, set up experiments, implement, evaluate, write a LaTeX paper, and iterate with simulated peer review until acceptance.",
+  "author": {
+    "name": "Loki Zhan",
+    "email": "yongxiang.zhan@outlook.com",
+    "url": "https://github.com/zyx1121"
+  },
+  "repository": "https://github.com/zyx1121/paper-generator",
+  "license": "MIT",
+  "keywords": ["research", "paper", "latex", "academic-writing", "peer-review", "pipeline"],
+  "mcpServers": "./.mcp.json"
+}

@@ -1,0 +1,16 @@
+{
+  "name": "paper-generator",
+  "owner": {
+    "name": "Loki Zhan",
+    "email": "yongxiang.zhan@outlook.com"
+  },
+  "description": "Marketplace for the paper-generator plugin.",
+  "plugins": [
+    {
+      "name": "paper-generator",
+      "source": "./",
+      "category": "productivity",
+      "tags": ["research", "latex", "paper", "peer-review"]
+    }
+  ]
+}
