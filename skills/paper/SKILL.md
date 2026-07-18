@@ -117,3 +117,16 @@ At gates, and whenever something is irreversible or genuinely ambiguous,
 ask — but always arrive with a recommendation and a reason, never an open-ended
 "what do you want?". Between gates, make reasonable calls yourself and record
 them under `## Decisions`.
+
+## Progress visibility
+
+Between gates you may be autonomous for hours. Do not go dark:
+
+- Before an unattended stretch (parallel agents, a long experiment batch),
+  state what is running, the expected duration, and the next event the user
+  will see.
+- As each meaningful unit completes — a build lands, a batch finishes, a
+  blocker appears — post a one-line progress update. The user should never
+  have to ask "where are we?".
+- A blocker that needs a user decision is surfaced immediately, with a
+  recommendation; never sit on it until the next gate.

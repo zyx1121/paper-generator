@@ -328,13 +328,17 @@ def tool_scholar_search(args):
     query = args["query"]
     limit = min(int(args.get("max_results", 10)), 20)
 
+    # Keyless, the shared S2 pool is rate-limited to near-uselessness
+    # (observed 0/3 success in real sessions): one shot, no sleep, fall
+    # through to OpenAlex. With a key, a retry is worth the wait.
+    attempts = 2 if os.environ.get("S2_API_KEY") else 1
     s2_err = None
-    for attempt in range(2):
+    for attempt in range(attempts):
         try:
             return _s2_search(query, limit)
-        except Exception as e:  # noqa: BLE001 — 429s are routine on the keyless pool
+        except Exception as e:  # noqa: BLE001 — 429s are routine
             s2_err = e
-            if attempt == 0:
+            if attempt < attempts - 1:
                 time.sleep(3)
     try:
         return _openalex_search(query, limit)

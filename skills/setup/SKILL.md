@@ -54,6 +54,16 @@ mid-experiment. Walk through what the plan needs and ask the user for each:
 Test each access path with a harmless read-only command before declaring it
 working. Record the inventory (not the secrets themselves) in `paper/plan.md`.
 
+Two lessons that cost real time when missed:
+
+- **Machines created later count too.** If the plan will create new machines
+  (VMs, containers, cloud instances), decide now how you will reach them —
+  network path, jump host, DNS — and verify the pattern with one probe.
+  A testbed you can build but not reach stalls the whole stage.
+- **Probe gently.** Repeated SSH connection attempts trip fail2ban and edge
+  rate limits, and getting banned mid-provisioning needs the user to rescue
+  you. Back off between retries; never hammer a host in a loop.
+
 ## 4. Experiment plan
 
 Write the evaluation *before* building — it is the contract the
