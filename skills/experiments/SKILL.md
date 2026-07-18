@@ -22,7 +22,11 @@ user override.
 
 ## Provenance per run
 
-One directory per run (or per sweep), self-describing:
+One directory per run (or per sweep), self-describing. The tree below is an
+example — exact file names and formats are yours (`spec.yaml` / `env.json` /
+`raw.jsonl` are equally fine, match your harness) as long as every run
+carries all five: launch command, config + seed, environment snapshot,
+untouched raw output, parsed data.
 
 ```
 experiments/

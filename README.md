@@ -33,6 +33,11 @@ Requirements on your machine:
 - **A LaTeX toolchain** — `latexmk` (TeX Live) or `tectonic`. The pipeline
   checks and tells you what to install if missing.
 - `matplotlib` in whatever Python your figure scripts use.
+- Optional: `S2_API_KEY` env var (free, from
+  [semanticscholar.org/product/api](https://www.semanticscholar.org/product/api)).
+  Without it `scholar_search` usually serves results via its OpenAlex
+  fallback, which is fine — a key just adds Semantic Scholar's richer
+  metadata.
 
 ## Use
 
