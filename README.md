@@ -6,10 +6,18 @@ venue, set up the experiment environment, implement, run experiments, analyze
 results, write a LaTeX paper in professional academic prose, and iterate
 through simulated peer review until every reviewer accepts.
 
-```
-idea ──▶ ideation ──▶ setup ──▶ implementation ──▶ experiments
-                                                        │
-   pdf ◀── finalize ◀── review loop ◀── writing ◀── analysis
+```mermaid
+flowchart LR
+    idea([idea]) --> ideation
+    ideation -->|"G1 proposal"| setup
+    setup -->|"G2 venue · plan"| implementation
+    implementation -->|"G3 artifact"| experiments
+    experiments -->|"G4 results"| analysis
+    analysis --> writing
+    writing -->|"G5 draft"| review["review loop"]
+    review -->|"G6 all accept"| finalize
+    finalize --> pdf([pdf])
+    review -.->|"must-fix → back to any stage"| implementation
 ```
 
 ## Install
