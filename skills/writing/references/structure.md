@@ -22,7 +22,8 @@ by the end of page 3.** Every section tells a story linearly — no backtracking
 
 ML venues (NeurIPS/ICML/ICLR): single column, 8–9 content pages, Related Work
 at Section 2, unlimited appendix, mandatory limitations discussion and
-reproducibility checklist.
+reproducibility checklist, plus an ethics / broader-impact statement where
+the venue requires one — check the current call for papers.
 
 ## Abstract — six moves, in order
 
