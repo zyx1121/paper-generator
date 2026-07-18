@@ -18,6 +18,11 @@ One Python script per figure in `paper/figures/`, executed with the
 **never** from numbers pasted into the script; the figure must regenerate if
 the experiment reruns.
 
+After each render, Read the produced PDF and look at it — legend placement,
+label sizes, clipping — before wiring it into the manuscript. (Drawn figures
+— architecture, state, flow diagrams — are not data figures; they are covered
+by the writing skill's references/diagrams.md.)
+
 Conventions that make figures read as publication-grade:
 
 - **Form follows the question.** Trends over a variable → line plot.

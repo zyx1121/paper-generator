@@ -30,10 +30,15 @@ Before investing anything, check the idea against the literature:
 - `arxiv_search` with 2–3 query formulations (problem phrasing, technique
   phrasing, fielded queries like `ti:"..." AND cat:cs.NI`), sorted by
   relevance and by `submittedDate` for the recent frontier.
-- WebSearch for the obvious name of the idea plus "paper" — catches venue
-  publications arXiv misses.
-- For the 3–5 closest hits, read the abstracts carefully and write one
-  sentence each: what they do, and what this idea does that they do not.
+- `scholar_search` with the same queries — it covers published venues arXiv
+  misses and returns citation counts; the high-citation hits are the prior
+  work reviewers will expect to see cited and differentiated.
+- WebSearch for the obvious name of the idea plus "paper" — catches whatever
+  both indexes miss.
+- For the 3–5 closest hits, go past the abstract: fetch the paper itself
+  (the `pdf` link from `scholar_search`, or the arXiv page) and read at
+  least the introduction and contributions. Then write one sentence each:
+  what they do, and what this idea does that they do not.
 
 Outcomes:
 - **Clear** — proceed.

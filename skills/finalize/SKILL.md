@@ -37,6 +37,9 @@ checklist, not a rewrite — substantive changes reopen the review loop.
       eliminated or < 3pt.
 - [ ] Every figure legible at print size (fonts ≥ body-text size when
       placed); vector, fonts embedded.
+- [ ] Visual pass: Read the final PDF page by page (the Read tool renders
+      PDF pages) — float placement, tables within margins, no orphaned
+      headings, nothing colliding. Do this last; it catches what no log can.
 - [ ] Title/abstract numbers match the evaluation's numbers exactly.
 - [ ] One last lint pass with the banned-word and LLM-tells lists from
       the writing skill's style.md — final edits love to reintroduce them.

@@ -30,8 +30,9 @@ between gates is yours to execute autonomously.
    every gate decision. Sessions end; the state file is how the pipeline
    resumes.
 4. **Use the paper-tools MCP server** for LaTeX compilation (`latex_compile`),
-   figures (`render_figure`), novelty scans (`arxiv_search`), and BibTeX
-   (`dblp_bibtex`) instead of ad-hoc shell commands.
+   figures (`render_figure`), novelty scans (`arxiv_search`,
+   `scholar_search`), and BibTeX (`dblp_bibtex`) instead of ad-hoc shell
+   commands.
 
 ## On invocation
 

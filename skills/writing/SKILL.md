@@ -12,7 +12,7 @@ description: >
 Goal: a complete, compiled draft PDF in `paper/manuscript/` that passes gate
 G5 and enters the review loop.
 
-**Before writing anything, read both references in full:**
+**Before writing anything, read the references in full:**
 
 - [references/structure.md](references/structure.md) — what goes where, and
   the per-section formulas (abstract's six moves, SPJ's intro discipline,
@@ -20,6 +20,9 @@ G5 and enters the review loop.
 - [references/style.md](references/style.md) — the prose rules: active
   voice, given-new flow, consistent terminology, claims calibration, banned
   words, and the reads-as-LLM tells to counter-program.
+- [references/diagrams.md](references/diagrams.md) — the drawn figures
+  (architecture, state, flow): TikZ standalone workflow, style rules, and
+  the compile-and-look loop.
 
 ## Order of writing
 
@@ -31,6 +34,8 @@ Write in this order — each step feeds the next:
    not get written down, full stop.
 2. **Figures and tables placement** — decide which figure/table carries each
    claim, and the headline Figure 1. The paper is written around them.
+   Drawn figures (architecture, state, flow) are produced now, per
+   references/diagrams.md — Figure 1 is often one of them.
 3. **Evaluation** — closest to the data, so write it while the analysis is
    fresh. RQ subsections, setup first, takeaways bolded. Every number
    copied from `experiments/`, never from memory.
@@ -66,6 +71,10 @@ Run the revision passes from style.md §Revision passes. Then verify:
 - [ ] no undefined refs/citations, no compile errors, overfull boxes < 5
 - [ ] within page limit with references handled per venue rules
 - [ ] terminology grep: no synonym drift on key terms
+- [ ] **visual pass**: Read the compiled PDF page by page (the Read tool
+      renders PDF pages) — float placement, figure sizing and label
+      legibility, tables inside the column, no stray page breaks. The
+      compile log cannot catch these; eyes can.
 
 Optionally spawn the `copyeditor` agent for an independent prose pass over
 `sections/` before presenting the draft.

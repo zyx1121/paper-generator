@@ -7,10 +7,12 @@ Tools:
   render_figure  — run a Python figure script headlessly (MPLBACKEND=Agg) and
                    report the image files it produced
   arxiv_search   — search the arXiv API (novelty / related-work scouting)
+  scholar_search — search Semantic Scholar (OpenAlex fallback): published
+                   venues, citation counts, open-access PDF links
   dblp_bibtex    — search DBLP and return ready-to-paste BibTeX entries
 
 Requires only the Python 3.9+ standard library. Network is used only by
-arxiv_search / dblp_bibtex.
+arxiv_search / scholar_search / dblp_bibtex.
 """
 
 import json
@@ -122,12 +124,14 @@ def tool_latex_compile(args):
     elif engine == "tectonic":
         rc, out = _run(["tectonic", "--keep-logs", main_tex], project_dir, timeout)
     elif engine == "pdflatex":
-        # pdflatex x2 with bibtex in between if a .bib is referenced
+        # pdflatex x2 with the bibliography tool in between if a .bib is used:
+        # biber for biblatex (\addbibresource), classic bibtex otherwise
         rc, out = _run(["pdflatex", "-interaction=nonstopmode",
                         "-file-line-error", main_tex], project_dir, timeout)
-        if rc == 0 and re.search(r"\\bibliography|\\addbibresource",
-                                 open(tex_path, errors="replace").read()):
-            for cmd in (["bibtex", base],
+        src = open(tex_path, errors="replace").read()
+        if rc == 0 and re.search(r"\\bibliography\b|\\addbibresource", src):
+            bib_tool = "biber" if "\\addbibresource" in src else "bibtex"
+            for cmd in ([bib_tool, base],
                         ["pdflatex", "-interaction=nonstopmode", main_tex],
                         ["pdflatex", "-interaction=nonstopmode", main_tex]):
                 rc2, out2 = _run(cmd, project_dir, timeout)
@@ -201,8 +205,11 @@ def tool_render_figure(args):
 ATOM = "{http://www.w3.org/2005/Atom}"
 
 
-def _http_get(url, timeout=30):
-    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+def _http_get(url, timeout=30, headers=None):
+    merged = {"User-Agent": USER_AGENT}
+    if headers:
+        merged.update(headers)
+    req = urllib.request.Request(url, headers=merged)
     with urllib.request.urlopen(req, timeout=timeout) as resp:
         return resp.read().decode("utf-8", errors="replace")
 
@@ -239,6 +246,101 @@ def tool_arxiv_search(args):
             "url": f"https://arxiv.org/abs/{arxiv_id}",
         })
     return {"ok": True, "count": len(papers), "papers": papers}
+
+
+# ------------------------------------------- scholarly search (S2 + OpenAlex)
+
+S2_FIELDS = ("title,abstract,venue,year,citationCount,authors,"
+             "externalIds,openAccessPdf,url")
+
+
+def _s2_search(query, limit):
+    url = ("https://api.semanticscholar.org/graph/v1/paper/search?" +
+           urllib.parse.urlencode({
+               "query": query, "limit": limit, "fields": S2_FIELDS,
+           }))
+    # The keyless shared pool rate-limits aggressively; a free key from
+    # https://www.semanticscholar.org/product/api lifts it.
+    headers = {}
+    if os.environ.get("S2_API_KEY"):
+        headers["x-api-key"] = os.environ["S2_API_KEY"]
+    data = json.loads(_http_get(url, headers=headers))
+
+    papers = []
+    for p in data.get("data") or []:
+        ext = p.get("externalIds") or {}
+        oa = p.get("openAccessPdf") or {}
+        papers.append({
+            "title": p.get("title"),
+            "authors": [a.get("name") for a in p.get("authors") or []][:12],
+            "year": p.get("year"),
+            "venue": p.get("venue") or None,
+            "citations": p.get("citationCount"),
+            "doi": ext.get("DOI"),
+            "arxiv": ext.get("ArXiv"),
+            "pdf": oa.get("url"),
+            "abstract": (p.get("abstract") or "")[:1200] or None,
+            "url": p.get("url"),
+        })
+    return {"ok": True, "source": "semantic_scholar",
+            "total": data.get("total"),
+            "count": len(papers), "papers": papers}
+
+
+def _openalex_search(query, limit):
+    url = ("https://api.openalex.org/works?" + urllib.parse.urlencode({
+        "search": query, "per-page": limit,
+        "select": ("title,publication_year,cited_by_count,doi,ids,"
+                   "primary_location,best_oa_location,authorships,"
+                   "abstract_inverted_index"),
+    }))
+    data = json.loads(_http_get(url))
+
+    papers = []
+    for w in data.get("results") or []:
+        # OpenAlex ships abstracts as an inverted index; reconstruct.
+        pos_to_word = {}
+        for word, positions in (w.get("abstract_inverted_index") or {}).items():
+            for pos in positions:
+                pos_to_word[pos] = word
+        abstract = " ".join(pos_to_word[i] for i in sorted(pos_to_word))
+        source = (w.get("primary_location") or {}).get("source") or {}
+        oa = w.get("best_oa_location") or {}
+        papers.append({
+            "title": w.get("title"),
+            "authors": [(a.get("author") or {}).get("display_name")
+                        for a in w.get("authorships") or []][:12],
+            "year": w.get("publication_year"),
+            "venue": source.get("display_name"),
+            "citations": w.get("cited_by_count"),
+            "doi": (w.get("doi") or "").replace("https://doi.org/", "") or None,
+            "arxiv": None,
+            "pdf": oa.get("pdf_url"),
+            "abstract": abstract[:1200] or None,
+            "url": (w.get("ids") or {}).get("openalex"),
+        })
+    return {"ok": True, "source": "openalex",
+            "total": (data.get("meta") or {}).get("count"),
+            "count": len(papers), "papers": papers}
+
+
+def tool_scholar_search(args):
+    query = args["query"]
+    limit = min(int(args.get("max_results", 10)), 20)
+
+    s2_err = None
+    for attempt in range(2):
+        try:
+            return _s2_search(query, limit)
+        except Exception as e:  # noqa: BLE001 — 429s are routine on the keyless pool
+            s2_err = e
+            if attempt == 0:
+                time.sleep(3)
+    try:
+        return _openalex_search(query, limit)
+    except Exception as e:  # noqa: BLE001
+        return {"ok": False, "error": (
+            f"semantic scholar failed ({s2_err}); openalex failed ({e})")}
 
 
 # ---------------------------------------------------------------- DBLP
@@ -336,6 +438,26 @@ TOOLS = [
             "required": ["query"],
         },
         "handler": tool_arxiv_search,
+    },
+    {
+        "name": "scholar_search",
+        "description": (
+            "Search scholarly literature (Semantic Scholar, falling back to "
+            "OpenAlex) across published venues — coverage arXiv lacks — with "
+            "citation counts, venue, year, DOI, and an open-access PDF link "
+            "when available. Use alongside arxiv_search in novelty scans; "
+            "use citation counts to rank which prior work reviewers will "
+            "expect cited."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "query": {"type": "string"},
+                "max_results": {"type": "integer", "description": "1-20, default 10"},
+            },
+            "required": ["query"],
+        },
+        "handler": tool_scholar_search,
     },
     {
         "name": "dblp_bibtex",

@@ -50,9 +50,10 @@ Individual stages are skills too, usable standalone:
 | `skills/<stage>` | Detailed procedure for each of the eight stages |
 | `skills/writing/references/structure.md` | CS paper structure distilled from Peyton Jones, Widom, SIGPLAN guidelines, venue author guides |
 | `skills/writing/references/style.md` | Prose rulebook: voice, information flow, terminology, claims calibration, banned words, LLM-tell counter-programming |
+| `skills/writing/references/diagrams.md` | Drawn figures (architecture / state / flow) in TikZ: standalone workflow, style rules, compile-and-look loop |
 | `agents/reviewer` | Simulated PC reviewer (three personas: domain expert, methods hawk, informed outsider) with a structured review form |
 | `agents/copyeditor` | In-place prose editor that enforces the style rulebook without touching technical content |
-| `mcp/paper_tools.py` | Zero-dependency MCP server: `latex_compile` (structured errors, page count), `render_figure`, `arxiv_search`, `dblp_bibtex` |
+| `mcp/paper_tools.py` | Zero-dependency MCP server: `latex_compile` (structured errors, page count), `render_figure`, `arxiv_search`, `scholar_search` (Semantic Scholar → OpenAlex; citation counts, OA PDFs), `dblp_bibtex` |
 
 ## Principles baked in
 
