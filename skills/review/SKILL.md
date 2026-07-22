@@ -25,9 +25,9 @@ actually say what the paper claims they say:
    work, a causal or conclusion-level statement, or a "first/only/best"
    positioning; the rest are routine.
 2. Verify all high-impact claims, plus a ~10% sample of the routine ones
-   (at least 3): fetch the cited source (the `pdf` link from
-   `scholar_search`, or the arXiv page) and check that it supports the
-   sentence as written.
+   (at least 3, or all if fewer): fetch the cited source (the `pdf` link
+   from `scholar_search`, or the arXiv page) and check that it supports
+   the sentence as written.
 3. Verdict per claim: **supported** / **distorted** (source says something
    weaker or different) / **unsupported** (source does not contain it) /
    **unverifiable** (source unreachable — say why).
@@ -81,16 +81,17 @@ discipline as a real rebuttal plus revision.
 
 ### 4. Re-review
 
-First close the ledger: mark every numbered point in `response.md` as
-**fulfilled**, **partial**, **not-fulfilled**, or **contested** (with the
-rationale from triage). A partial or not-fulfilled point without a recorded
-reason carries into the next round as an automatic must-fix — a promise in
-a response is a debt, not an answer.
+First close the response ledger: mark every numbered point in `response.md`
+as **fulfilled**, **partial**, **not-fulfilled**, or **contested** (with
+the rationale from triage). A partial or not-fulfilled point without a
+recorded reason carries into the next round as an automatic must-fix — a
+promise in a response is a debt, not an answer.
 
-Then the next round: same three personas, given the revised manuscript
-**and** the previous round's reviews plus `response.md` with its ledger,
-instructed to verify whether each of their points was addressed and to
-score afresh.
+Then the next round: if the revision touched `refs.bib`, re-run the
+claim–citation audit (step 0) first. Spawn the same three personas, given
+the revised manuscript **and** the previous round's reviews plus
+`response.md` with its ledger, instructed to verify whether each of their
+points was addressed and to score afresh.
 
 ## Termination
 

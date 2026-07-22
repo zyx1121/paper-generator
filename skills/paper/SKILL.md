@@ -58,7 +58,7 @@ paper/
 │   └── results.md      # RQ → data file mapping, with per-RQ takeaways
 ├── figures/            # figure scripts (*.py) and rendered PDFs
 ├── manuscript/         # main.tex, sections/, refs.bib, venue style files
-└── reviews/            # round-N/reviewer-{A,B,C}.md + response.md per round
+└── reviews/            # round-N/: reviewer-{A,B,C}.md, response.md, citation-audit.md
 ```
 
 ## STATE.md format

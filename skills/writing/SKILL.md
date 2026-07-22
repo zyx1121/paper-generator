@@ -45,12 +45,12 @@ Write in this order — each step feeds the next:
    versions over arXiv duplicates; complete, consistent entries). Never
    hand-write a bib entry from memory — if no index (`dblp_bibtex`,
    `arxiv_search`, `scholar_search`) can produce it, do not cite it.
-   Thematic paragraphs, each ending with an explicit differentiator.
    Describe a prior work only from material actually fetched and read —
    this session, or the novelty-scan notes in `proposal.md`. Caught
    describing a paper from memory: stop, fetch it, or write
    `[MATERIAL GAP: <paper, what is unknown>]` in the draft and resolve it
-   before the gate.
+   before the gate. Thematic paragraphs, each ending with an explicit
+   differentiator.
 6. **Introduction** — problem-by-example plus the contributions list with
    forward references. One page.
 7. **Conclusion**, then **Abstract** (six moves, numbers included) and
