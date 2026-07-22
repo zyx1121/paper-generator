@@ -30,6 +30,14 @@ checklist, not a rewrite — substantive changes reopen the review loop.
 - Consistent venue naming across all entries; arXiv duplicates of published
   papers replaced by the published version; every entry has
   author/title/venue/year.
+- Every entry carries a resolvable identifier — DOI or arXiv ID — obtained
+  from an index (`dblp_bibtex`, `arxiv_search`), never typed from memory.
+  Spot-check that the identifiers of entries added or edited since G5
+  actually resolve.
+- Confidence is source count: an entry confirmed by two independent sources
+  (e.g. DBLP plus the paper's own arXiv page or DOI landing page) is solid;
+  an entry only one index knows gets a second look, and a note in the
+  delivery summary if it stays single-source.
 
 ## Final quality gates
 

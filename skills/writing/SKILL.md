@@ -42,8 +42,15 @@ Write in this order — each step feeds the next:
 4. **Design/Method, then Implementation** (from IMPLEMENTATION_NOTES.md),
    then Background — introduce the running example early.
 5. **Related Work** — build `refs.bib` with `dblp_bibtex` (prefer published
-   versions over arXiv duplicates; complete, consistent entries). Thematic
-   paragraphs, each ending with an explicit differentiator.
+   versions over arXiv duplicates; complete, consistent entries). Never
+   hand-write a bib entry from memory — if no index (`dblp_bibtex`,
+   `arxiv_search`, `scholar_search`) can produce it, do not cite it.
+   Describe a prior work only from material actually fetched and read —
+   this session, or the novelty-scan notes in `proposal.md`. Caught
+   describing a paper from memory: stop, fetch it, or write
+   `[MATERIAL GAP: <paper, what is unknown>]` in the draft and resolve it
+   before the gate. Thematic paragraphs, each ending with an explicit
+   differentiator.
 6. **Introduction** — problem-by-example plus the contributions list with
    forward references. One page.
 7. **Conclusion**, then **Abstract** (six moves, numbers included) and
@@ -71,6 +78,8 @@ Run the revision passes from style.md §Revision passes. Then verify:
 - [ ] no undefined refs/citations, no compile errors, overfull boxes < 5
 - [ ] within page limit with references handled per venue rules
 - [ ] terminology grep: no synonym drift on key terms
+- [ ] no `[MATERIAL GAP]` markers remain; every prior-work description
+      traces to a fetched source
 - [ ] **visual pass**: Read the compiled PDF page by page (the Read tool
       renders PDF pages) — float placement, figure sizing and label
       legibility, tables inside the column, no stray page breaks. The

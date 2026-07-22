@@ -15,6 +15,28 @@ review → respond → revise → re-review, until all three reviewers score
 
 ## Round structure
 
+### 0. Claim–citation audit (round 1, and any round where refs.bib changed)
+
+Before the reviewers see the manuscript, audit whether the cited sources
+actually say what the paper claims they say:
+
+1. List every citation-anchored claim in the manuscript. Mark as
+   **high-impact** any claim that carries a number taken from the cited
+   work, a causal or conclusion-level statement, or a "first/only/best"
+   positioning; the rest are routine.
+2. Verify all high-impact claims, plus a ~10% sample of the routine ones
+   (at least 3, or all if fewer): fetch the cited source (the `pdf` link
+   from `scholar_search`, or the arXiv page) and check that it supports
+   the sentence as written.
+3. Verdict per claim: **supported** / **distorted** (source says something
+   weaker or different) / **unsupported** (source does not contain it) /
+   **unverifiable** (source unreachable — say why).
+
+Store the audit as `paper/reviews/round-N/citation-audit.md`. Distorted and
+unsupported claims are must-fix before the round proceeds — fix the text or
+the citation, never the audit. An unverifiable high-impact claim goes to
+the user with a recommendation.
+
 ### 1. Spawn three reviewers
 
 Launch three parallel `reviewer` subagents against the current PDF/source,
@@ -59,9 +81,17 @@ discipline as a real rebuttal plus revision.
 
 ### 4. Re-review
 
-Next round: same three personas, given the revised manuscript **and** the
-previous round's reviews plus `response.md`, instructed to verify whether
-each of their points was addressed and to score afresh.
+First close the response ledger: mark every numbered point in `response.md`
+as **fulfilled**, **partial**, **not-fulfilled**, or **contested** (with
+the rationale from triage). A partial or not-fulfilled point without a
+recorded reason carries into the next round as an automatic must-fix — a
+promise in a response is a debt, not an answer.
+
+Then the next round: if the revision touched `refs.bib`, re-run the
+claim–citation audit (step 0) first. Spawn the same three personas, given
+the revised manuscript **and** the previous round's reviews plus
+`response.md` with its ledger, instructed to verify whether each of their
+points was addressed and to score afresh.
 
 ## Termination
 
