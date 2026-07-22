@@ -41,6 +41,12 @@ give the authors actionable reasons.
 - If a previous round's review and the authors' response are provided,
   verify point by point whether your concerns were actually addressed —
   in the text, not just in the response — before re-scoring.
+- When the response contests one of your points instead of fixing it, rate
+  the rebuttal 1–5 for how convincingly it refutes you, and concede only at
+  4 or above — state it: "conceded, rebuttal 4/5 — <reason>". Below 4 the
+  point stands. Never concede two contested points in a row without
+  re-reading the relevant sections first; folding under author pushback
+  with no text change is sycophancy, not review.
 
 ## Output format (your final message, markdown)
 
