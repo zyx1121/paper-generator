@@ -12,6 +12,28 @@ of recent award-level papers plus the venues' own CFPs and reviewer guides.
 Claims that rest on thin evidence (n=1, secondhand CFP quotes) are marked
 *uncertain* inside the profiles — do not harden those into rules.
 
+## Freshness
+
+A profile mixes two kinds of knowledge with very different half-lives. Trust
+them differently.
+
+- **Structural and rhetorical conventions** — section order, related-work
+  placement, evaluation organization, tone, figure and caption vocabulary,
+  how numbers are phrased. These are community habits; they shift over
+  decades, not release cycles. Read them as durable.
+- **Hard format facts** — page limits, column counts, template versions and
+  classes, checklist items, anonymization rules, artifact-evaluation
+  mechanics and deadlines. These change every year, sometimes per edition of
+  the same venue. The profile holds a snapshot, dated in the `Facts
+  verified:` line under each title.
+
+The authority for every hard format fact is **that year's CFP and author
+guide**, never this directory. When the venue is locked at Stage 2, re-verify
+the profile's format facts line by line against the live CFP, record the
+venue-specific truth in `paper/venue.md`, and report any drift so the profile
+can be corrected. A profile whose `Facts verified:` date is more than a year
+old should be treated as a lead, not a rule.
+
 ## How profiles enter the pipeline
 
 1. **Setup (Stage 2)** — when the venue is chosen, record the matching

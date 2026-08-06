@@ -1,5 +1,9 @@
 # Software engineering venue profile
 
+> Facts verified: 2026-08-06 — format rules (pages, templates, checklists,
+> deadlines-adjacent mechanics) decay yearly; re-verify against the live CFP
+> before relying on them.
+
 Venues: ICSE, FSE, ASE. Grounded in full reads of EDEFuzz (ICSE'24
 Distinguished, tool), TypeGen (ASE'23 Distinguished, tool), and an ICSE'23
 empirical study on DL vulnerability detection. This is the home of

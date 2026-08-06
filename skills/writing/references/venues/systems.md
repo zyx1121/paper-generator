@@ -1,5 +1,9 @@
 # Systems / cloud infrastructure venue profile
 
+> Facts verified: 2026-08-06 — format rules (pages, templates, checklists,
+> deadlines-adjacent mechanics) decay yearly; re-verify against the live CFP
+> before relying on them.
+
 Venues: OSDI, SOSP, ATC, EuroSys (USENIX/ACM tier); ICDCS, IC2E, Middleware
 (IEEE/ACM second tier). Grounded in full reads of ServerlessLLM (OSDI'24),
 vLLM (SOSP'23), Tangram (ICDCS'24), plus a title census of six 2024

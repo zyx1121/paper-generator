@@ -1,5 +1,9 @@
 # Security venue profile
 
+> Facts verified: 2026-08-06 — format rules (pages, templates, checklists,
+> deadlines-adjacent mechanics) decay yearly; re-verify against the live CFP
+> before relying on them.
+
 Venues: IEEE S&P, USENIX Security, CCS, NDSS. Grounded in full reads of
 Terrapin (USENIX Sec'24 Distinguished, protocol attack), Adversarial
 Illusions (USENIX Sec'24 Distinguished, ML attack), BENZENE (S&P'24

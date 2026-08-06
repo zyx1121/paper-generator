@@ -1,5 +1,9 @@
 # Networking / wireless / mobile venue profile
 
+> Facts verified: 2026-08-06 — format rules (pages, templates, checklists,
+> deadlines-adjacent mechanics) decay yearly; re-verify against the live CFP
+> before relying on them.
+
 Venues: SIGCOMM, NSDI, MobiCom, MobiSys, INFOCOM. Grounded in full reads of
 mmReliable (SIGCOMM'21), Gemini (MobiCom'24), and an INFOCOM'21 WiGig
 measurement study — strongest for the wireless/mmWave sub-genre; re-verify

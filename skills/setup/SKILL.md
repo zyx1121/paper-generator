@@ -35,6 +35,18 @@ field-specific structure (evaluation organization, related-work placement,
 signature sections, tone) in the writing and review stages. If no profile
 fits, write `profile: none` and note why.
 
+**Re-verify the profile's format facts against this year's CFP.** The profile
+is a dated snapshot (see its `Facts verified:` line); hard format facts decay
+yearly while its structural and rhetorical advice does not. With the venue
+locked, walk the profile's format-facts section line by line against the live
+CFP and author guide and confirm each of: page limit and what counts toward
+it, column count and font size, template version/class, required checklists
+or statements, anonymization rules, and whether artifact evaluation exists
+plus its deadline. Record the verified values in `venue.md` — those, not the
+profile, govern the manuscript. Report every difference you find as profile
+drift, and open a PR updating the profile's affected lines and its
+`Facts verified:` date.
+
 Record the venue's **artifact regime** in `venue.md` at the same time:
 separate artifact evaluation with badges (typical for systems, security,
 SE — note the AE deadline relative to notification), checklist-tied code

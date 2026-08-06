@@ -1,5 +1,9 @@
 # HCI venue profile
 
+> Facts verified: 2026-08-06 — format rules (pages, templates, checklists,
+> deadlines-adjacent mechanics) decay yearly; re-verify against the live CFP
+> before relying on them.
+
 Venues: CHI, UIST, CSCW. Grounded in full reads of Augmented Physics
 (UIST'24 Best Paper, artifact), Infrastructuring Care (CHI'23 Best Paper,
 qualitative diary study), Crossing the Threshold (CSCW'23 Best Paper,
