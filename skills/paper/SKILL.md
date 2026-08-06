@@ -42,8 +42,9 @@ between gates is yours to execute autonomously.
    resumes.
 4. **Use the paper-tools MCP server** for LaTeX compilation (`latex_compile`),
    figures (`render_figure`), novelty scans (`arxiv_search`,
-   `scholar_search`), and BibTeX (`dblp_bibtex`) instead of ad-hoc shell
-   commands.
+   `scholar_search`), BibTeX (`dblp_bibtex`), reading papers in full
+   (`fetch_paper` — handles the ar5iv and blocked-host fallbacks), and the
+   mechanical number audit (`trace_check`) instead of ad-hoc shell commands.
 
 ## On invocation
 

@@ -449,6 +449,31 @@ def check_python() -> Result:
 
 
 # --------------------------------------------------------------------------
+# 6. MCP server self-test
+# --------------------------------------------------------------------------
+
+
+def check_selftest() -> Result:
+    result = Result("selftest", detail=f"{MCP_SERVER} --self-test (offline unit tests)")
+    server = REPO_ROOT / MCP_SERVER
+    if not server.is_file():
+        result.errors.append(f"{MCP_SERVER}: file not found")
+        return result
+    result.checked = 1
+    proc = subprocess.run(
+        [sys.executable, str(server), "--self-test"],
+        capture_output=True,
+        text=True,
+        timeout=120,
+    )
+    if proc.returncode != 0:
+        detail = (proc.stderr or proc.stdout).strip().splitlines()
+        tail = detail[-1] if detail else f"exit {proc.returncode}"
+        result.errors.append(f"{MCP_SERVER}: self-test failed: {tail}")
+    return result
+
+
+# --------------------------------------------------------------------------
 # driver
 # --------------------------------------------------------------------------
 
@@ -458,6 +483,7 @@ CHECKS = {
     "plugin": check_plugin_json,
     "frontmatter": check_frontmatter,
     "python": check_python,
+    "selftest": check_selftest,
 }
 
 

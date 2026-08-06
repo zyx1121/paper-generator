@@ -85,7 +85,10 @@ Run the revision passes from style.md §Revision passes. Then verify:
 - [ ] every contribution bullet forward-references a section that
       substantiates it, and that section actually does
 - [ ] every figure/table referenced in text, captions state the finding
-- [ ] every number in the text traces to `experiments/`
+- [ ] every number in the text traces to `experiments/` — run `trace_check`
+      (manuscript dir vs. `experiments/`) and account for every unmatched
+      value it flags: point it at the evidence, mark it as derived/quoted,
+      or delete it. Flag-only tool; the accounting is yours
 - [ ] no undefined refs/citations, no compile errors, overfull boxes < 5
 - [ ] within page limit with references handled per venue rules
 - [ ] terminology grep: no synonym drift on key terms

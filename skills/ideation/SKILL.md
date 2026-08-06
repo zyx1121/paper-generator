@@ -39,9 +39,10 @@ Before investing anything, check the idea against the literature.
 - WebSearch for the obvious name of the idea plus "paper" — catches whatever
   both indexes miss.
 - For the 3–5 closest hits, go past the abstract: fetch the paper itself
-  (the `pdf` link from `scholar_search`, or the arXiv page) and read at
-  least the introduction and contributions. Then write one sentence each:
-  what they do, and what this idea does that they do not.
+  with `fetch_paper` (it handles the arXiv→ar5iv→PDF fallbacks and
+  blocked-host retries) and read at least the introduction and
+  contributions. Then write one sentence each: what they do, and what this
+  idea does that they do not.
 
 ### 2b. Field-specific sources — do not skip
 

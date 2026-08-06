@@ -25,9 +25,9 @@ actually say what the paper claims they say:
    work, a causal or conclusion-level statement, or a "first/only/best"
    positioning; the rest are routine.
 2. Verify all high-impact claims, plus a ~10% sample of the routine ones
-   (at least 3, or all if fewer): fetch the cited source (the `pdf` link
-   from `scholar_search`, or the arXiv page) and check that it supports
-   the sentence as written.
+   (at least 3, or all if fewer): fetch the cited source with `fetch_paper`
+   (falling back to the `pdf` link from `scholar_search`) and check that it
+   supports the sentence as written.
 3. Verdict per claim: **supported** / **distorted** (source says something
    weaker or different) / **unsupported** (source does not contain it) /
    **unverifiable** (source unreachable — say why).
