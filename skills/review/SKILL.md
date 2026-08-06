@@ -40,10 +40,20 @@ the user with a recommendation.
 ### 1. Spawn three reviewers
 
 Launch three parallel `reviewer` subagents against the current PDF/source,
-each with a distinct persona (pass persona + venue + manuscript path + the
-venue profile path from `paper/venue.md` in the prompt — reviewers judge
-against that field's conventions, e.g. whether an RQ-headed evaluation or a
-missing threat model is normal or a red flag at this venue):
+each with a distinct persona. Pass each one: persona + venue + manuscript
+path + the venue profile path from `paper/venue.md`.
+
+The three-persona skeleton is universal; **the specialization comes from
+the profile's "Reviewer personas at this venue" section**, which says what
+each persona hunts in this field and which field must-checks apply (e.g. a
+checklist audit at NeurIPS, threat-model coherence at USENIX Sec,
+contribution-type-matched rigor at CHI). Quote that section into each
+reviewer's prompt — reviewers must judge against their own field's bar, in
+both directions: flag violations of this field's conventions, and never
+demand another field's (no RQ headers or Threats-to-Validity at a systems
+venue, no statistics from CHI qualitative work).
+
+Generic skeleton (fallback when venue.md says `profile: none`):
 
 - **Reviewer A — domain expert.** Knows the closest prior work intimately;
   expertise 4/4. Hunts: missing citations, overlap with prior systems,

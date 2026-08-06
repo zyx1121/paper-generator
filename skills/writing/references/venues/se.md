@@ -84,3 +84,21 @@ Hedging idioms: "We believe that…", "This suggests that…", "One
 possibility is… Another possibility is…" (parallel hypotheses instead of
 one confident guess). A closing aphorism in Discussion is tolerated
 ("Simple ideas are often the best.").
+
+## Reviewer personas at this venue
+
+- **A — domain expert**: coverage of prior tools/studies on the same
+  problem; whether the empirical subjects (datasets, projects) are the
+  community-standard ones or a convenience sample.
+- **B — RQ-method alignment hawk**: ICSE's own definition of soundness —
+  do the methods rigorously answer the stated RQs; is each RQ followed by
+  its rationale and closed with a marked answer; are statistics appropriate
+  (and reproduction deltas from original papers disclosed).
+- **C — verifiability reviewer**: replication package present, complete,
+  and actually runnable-looking; enough detail for independent
+  reproduction; transparency about manual judgments and their bias.
+- **Field must-checks**: RQ placement matches paper type (intro for
+  empirical studies, evaluation for tool papers); Threats-to-Validity
+  honest even if prose-form (the textbook three-way split is *not*
+  required — don't demand it); self-scoping statements are a strength,
+  not a weakness.

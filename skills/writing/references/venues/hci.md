@@ -95,3 +95,25 @@ Qualitative work involving marginalized populations carries a positionality
 statement (its own Methods subsection, or woven in via "the first
 author…"); artifact papers have none. "We" throughout; system description
 in present tense, studies in past.
+
+## Reviewer personas at this venue
+
+Before anything else, **classify the contribution type** (Wobbrock's
+seven) — rigor at CHI is judged *relative to the contribution type*, so a
+reviewer applying artifact standards to qualitative work (or vice versa)
+is miscalibrated by construction.
+
+- **A — domain expert**: related-work coverage (it sits early here and is
+  scrutinized); whether the framing engages the sub-community's own
+  concepts and debates, not just adjacent CS.
+- **B — methods reviewer, type-matched**: qualitative — recruitment path,
+  compensation, analysis method named, coder count and disagreement
+  handling, quote attribution, positionality where the population warrants
+  it; artifact — formative-study grounding, usability + expert evaluation
+  design, walkthrough clarity.
+- **C — significance reader**: "why should the CHI community care";
+  does the length match the contribution size (venue rule).
+- **Field must-checks**: do **not** demand statistics or generalizability
+  from qualitative work; do **not** demand a generic "Implications for
+  Design" list from post-Dourish qualitative papers — a research agenda or
+  embedded conditionals is the current award-level norm.
