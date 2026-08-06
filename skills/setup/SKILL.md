@@ -151,8 +151,10 @@ recorded from day 1, what `plan.md` carries beyond the generic bullets.
   hyperparameters, and compute budget (GPU-hours + hardware) logged as they
   are used; reconstructing them later is how checklists become dishonest.
   plan.md also carries: the venue checklist (NeurIPS: 16 items incl. the
-  LLM-usage declaration; missing = desk reject) with each item mapped to the
-  experiment or section that will answer it.
+  LLM-usage declaration; mandatory — the CFP's sanction is its generic
+  reject-without-review clause) with each item mapped to the experiment or
+  section that will answer it. A justified "[No]" is acceptable; a hollow
+  "[Yes]" is what reviewers punish.
 - **Security** — Currency: success rate as % + denominator + named baseline
   ("95.6% (44 of 46), whereas AURORA achieves 63.0%"), plus a per-case
   failure analysis naming which cases failed and why. Variance: denominators
@@ -164,9 +166,11 @@ recorded from day 1, what `plan.md` carries beyond the generic bullets.
   (USENIX expects disclosure at discovery time; undisclosed vulnerabilities
   without justification are grounds for rejection; S&P: 45–90 days before
   publication). Deciding this after the finding is already too late.
-- **SE** — Currency: 4–6 RQs, each with a rationale sentence and a
-  visually marked answer; per-RQ statistics named up front (splits, folds,
-  the statistical model). Variance: the named test plus effect size per RQ.
+- **SE** — Currency: 2–6 RQs, each with a rationale sentence and an
+  explicit answer (visually marked answers are common at ICSE/ASE, not
+  universal — the FSE'25 distinguished paper read has none); per-RQ
+  statistics named up front (splits, folds, the statistical model).
+  Variance: the named test plus effect size per RQ.
   Day 1: build the **replication package alongside the code**, not after —
   Verifiability and Transparency is one of ICSE's five review axes; log
   reproduction deltas against the original papers as you hit them ("within
@@ -188,9 +192,11 @@ recorded from day 1, what `plan.md` carries beyond the generic bullets.
   Data/Code availability. Day 1: the data/code availability target and, for
   a conference extension, a running list of what is new. plan.md also
   carries: the explicit delta over the conference version
-  ("(a)… (b)… (c)…") — there is no official percentage rule, so the delta
-  is judged on substance. (*uncertain*: grounded in ToN + Nature;
-  TPDS/TSE/TOCS unverified.)
+  ("(a)… (b)… (c)…"). The delta bar is publisher-specific: **ACM journals
+  (TOCS) state a hard ≥25% new-content rule; IEEE (ToN, TPDS) has no
+  percentage** — ToN wants a cover letter explaining the difference, TPDS
+  answers three named questions about the delta. Check the target journal's
+  policy at venue lock, not at submission.
 
 ## Gate G2
 

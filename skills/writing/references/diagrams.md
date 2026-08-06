@@ -71,7 +71,9 @@ tables appear only for dense numeric grids. CDF culture is real: plot the
 distribution and name the median in prose. Variance is drawn, not asserted —
 shaded ±std bands, 2D std ellipses for two-axis scatter, and an integer run
 count in the caption or text ("100 experiments"), never "several runs".
-Captions here often add a one-line takeaway after the descriptive label.
+Wireless papers often add a one-line takeaway after the descriptive label;
+the wired-core NSDI paper read instead tags each caption with its evidence
+source ("[Testbed]" / "[Simulation]") — a convention worth copying.
 
 **ML** (NeurIPS, ICML, ICLR). Figure 1 is a **teaser** — mechanism sketch,
 pipeline contrast, or a display of the phenomenon being challenged — and has
@@ -82,13 +84,14 @@ format: design full-width figures at ≈5.5in, not the 3.3in `\columnwidth`
 the style rules below assume.
 
 **Security** (S&P, USENIX Sec, CCS, NDSS). Split by subtype. Tool papers open
-with a pipeline diagram and are carried by a large capability-comparison
-table with a symbol legend (✓/✗) defined in the caption, plus an enumerated
-per-case failure list *(uncertain — one tool paper read)*. Attack papers open
-with an attack-flow or protocol-message diagram (an MSC fits) and put
-distribution plots in the separate deployment-measurement section. Figures are
-a known anonymization leak: no author-identifying paths, and no full CVE
-numbers in the review version.
+with a pipeline diagram and are carried by a large comparison table with a
+symbol legend (✓/✗) defined in the caption — seen in both a tool paper and
+an NDSS attack paper (Table II), so it crosses subtypes — plus an enumerated
+per-case failure list. Attack papers open with an attack-flow or
+protocol-message diagram (an MSC fits), use circled ❶❷❸ callouts to number
+procedure steps inside figures, and put distribution plots in the separate
+deployment-measurement section. Figures are a known anonymization leak: no
+author-identifying paths, and no full CVE numbers in the review version.
 
 **SE** (ICSE, FSE, ASE). Result **tables keyed to the RQs** are the primary
 display items and figures are secondary: a tool/pipeline diagram, plus per-RQ
@@ -97,15 +100,22 @@ reachable from an RQ; an unattached figure reads as padding here.
 
 **HCI** (CHI, UIST, CSCW). Artifact papers are screenshot-driven: annotated UI
 captures plus a walkthrough figure whose step numbers match the numbered
-operation steps in the System section. Qualitative papers run figure-light —
-a method or timeline diagram and little else, because quotes are the evidence
-*(uncertain — pattern from 2 papers)*. Single-column, so full text width.
+operation steps in the System section. Quantitative experiment papers carry a
+page-1 conceptual figure, per-condition manipulation screenshots, an
+experiment-flow diagram, and box/interaction plots whose captions define the
+significance-star key. Qualitative papers run figure-light — a method or
+timeline diagram and little else, because quotes are the evidence
+*(uncertain — pattern from 2 papers)*. Widths differ by venue: CHI reviews
+single-column (but publishes two-column via TAPS), CSCW is single-column
+acmsmall, and **UIST is two-column sigconf — design its figures at
+`\columnwidth`**.
 
-**Journals**. Nature/Science: **≤6 display items total**, a hard budget that
-forces panel merging; legends under 250 words and self-contained, since they
-carry method detail the main text drops. IEEE/ACM Transactions: figures skew
-architectural and diagrammatic rather than photographic, matching the strict
-IMRaD body.
+**Journals**. Nature/Science: the display-item budget is tied to the page
+budget (a 6-page Nature Article ≈ 4 items, 8 pages ≈ 5–6) — a hard constraint
+that forces panel merging; legends under 300 words and self-contained, since
+they carry method detail the main text drops. IEEE/ACM Transactions: figures
+skew architectural and diagrammatic rather than photographic, matching the
+strict IMRaD body.
 
 ## Style rules
 
