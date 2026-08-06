@@ -36,6 +36,35 @@ Claims that rest on thin evidence (n=1, secondhand CFP quotes) are marked
 | [hci.md](hci.md) | CHI, UIST, CSCW | Interactive systems, user studies, qualitative work |
 | [journals.md](journals.md) | Nature/Science; IEEE/ACM Transactions | Journal submissions and conference-to-journal extensions |
 
+## Pipeline scope per field
+
+The profiles above say how a field writes. This table says what the pipeline
+can actually produce for that field. The pipeline runs computational
+experiments end to end; it cannot recruit participants, obtain IRB approval,
+conduct an interview, pay compensation, or hold a disclosure conversation with
+a vendor. Where a field's core evidence depends on one of those, the pipeline
+hands that step back to the user — it never simulates it.
+
+| Field | Pipeline runs autonomously | Handed back to a human | Out of scope |
+|---|---|---|---|
+| Systems, networking, ML, SE tool papers | The whole evidence loop: testbed, baselines, benchmarks, training, ablations, analysis | Gate approvals; access to machines, datasets, licenses | — |
+| SE empirical with manual labeling / multi-coder | Mining, sampling frame, codebook drafts, agreement statistics, analysis of returned labels | The labeling itself, whenever a claim rests on human coders: real coders, real independent labels, real inter-rater agreement | Model-generated labels presented as a human coder or as a second rater |
+| Security | Attacks, defenses, measurement, tooling — on systems the user is authorized to touch | Disclosure for a newly found vulnerability: contacting the vendor, CVE request, embargo. The pipeline drafts the report and the timeline; a human sends it and records the real dates | Unauthorized testing of live third-party systems; a disclosure timeline that did not happen |
+| HCI artifact / interactive systems (UIST-style) | Building the system; technical evaluation (latency, accuracy, robustness); study protocol, tasks, and instruments; analysis of data the user returns | Every usability or expert study with real participants: IRB, recruitment, sessions, compensation | Synthetic participants, simulated ratings, invented quotes or N |
+| HCI qualitative, CSCW, any human-subjects study | Literature framing; protocol and instrument design; analysis and write-up of data the user collected | All data collection — here it *is* the paper's core evidence, not one section of it | Running the pipeline to a finished paper without real participants |
+
+Two rules follow from the table:
+
+- **Raise it at ideation (Stage 1), not at Stage 4.** If the topic's core
+  evidence is human-subjects data, say so before G1 and give the real cost
+  (IRB alone is weeks). The user then picks one: run the study themselves on
+  their own timeline, narrow the claim to what artifact evidence can carry, or
+  move the work to a field where the pipeline can produce the evidence.
+- **Partial autonomy is still autonomy.** An out-of-scope step does not kill
+  the paper. Do everything on the left of the table, block on the returned
+  artifact (labels, session data, disclosure dates), and record the handoff in
+  STATE.md under `## Open questions` so a resume does not quietly skip it.
+
 ## The five axes that vary most
 
 Encoded per-profile; this table is the orientation map.

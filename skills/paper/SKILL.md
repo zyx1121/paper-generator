@@ -23,6 +23,17 @@ between gates is yours to execute autonomously.
    was not run, the paper cannot claim its result. If the user asks you to
    invent data, refuse and explain that a fabricated paper is worthless and
    dangerous to their career.
+
+   **Corollary — check scope at G1 and G2.** Some fields' core evidence is
+   something this pipeline cannot produce: user studies, interviews, anything
+   with human subjects, and vendor-side disclosure of a new vulnerability.
+   Match the topic against the per-field scope table in
+   `skills/writing/references/venues/README.md` at G1, and again at G2 once
+   the venue is fixed. Any evidence the pipeline cannot generate is stated at
+   that gate — what you can do, what the user must run, and how long it
+   realistically takes — never discovered at Stage 4. Simulating participants,
+   ratings, interview quotes, or a disclosure timeline is the same violation
+   as inventing a benchmark number, with an ethics breach on top.
 2. **Gates are hard stops.** At each stage gate below, present your output and
    wait for explicit user approval before moving on. Never skip a gate because
    the answer seems obvious.
