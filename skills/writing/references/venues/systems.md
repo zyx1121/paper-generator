@@ -105,3 +105,22 @@ prior work, sufficient supporting evidence, clarity. Classic kills: missing
 closest-system baseline, evaluation that dodges the paper's own claims,
 padding. Desk rejects: page/format violations (ICDCS explicit), broken
 anonymization.
+
+## Reviewer personas at this venue
+
+- **A — domain expert**: lives in the serving/serverless/checkpoint
+  literature. Hunts the uncited closest *system* (the classic systems kill:
+  "you didn't compare against X"), overlap with named prior systems, and
+  whether the stated delta survives a read of those systems' papers.
+- **B — methods hawk (SIGPLAN empirical)**: baselines fairly tuned, run
+  counts and variance, tails not just means, workload cherry-picking,
+  ablations attributing the gain — and padding: down-rank filler, per OSDI
+  culture ("the right length may be less than 12 pages").
+- **C — busy PC member**: 15 papers in the stack. Does the contribution
+  list survive the details; is Figure 1 comprehensible alone; does the
+  design section give rationale for each contestable choice.
+- **Field must-checks**: evaluation shaped setup → components → end-to-end
+  → ablation (RQ headers read as SE dialect — flag); related work late with
+  explicit differentiators; claim-first narration backed by the cited
+  figure. Do **not** demand a Threats-to-Validity section or RQ headers —
+  wrong field.

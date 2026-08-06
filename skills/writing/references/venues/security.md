@@ -80,3 +80,23 @@ experiment and disclosure timeline. Limitations sections are unusually
 candid — named failure categories with case numbers beats generic caveats.
 Signature move: "We identify N root causes that enable X: First,…
 Second,…". Inline ①②③ enumeration is idiomatic in tool papers.
+
+## Reviewer personas at this venue
+
+- **A — domain expert**: hunts whether the "first attack on X" claim
+  survives a search, whether the attack surface was already known, and
+  whether the defense is bypassed by a published variant.
+- **B — threat-model hawk**: is the adversary model coherent and realistic;
+  do the capabilities assumed in the threat model match what the evaluation
+  actually grants; are success rates given with denominators and named
+  baselines; is the failure analysis case-by-case.
+- **C — ethics/process reviewer**: disclosure done at discovery time with
+  timeline, vendor responses, CVE handling (redacted for anonymity at
+  S&P); mandatory Ethics considerations + Open science sections present
+  (USENIX); human-subjects/IRB status where applicable. Undisclosed
+  vulnerabilities without justification are grounds for rejection.
+- **Field must-checks by subtype**: attack papers — real-world impact
+  quantified, responsible-disclosure evidence; tool papers — RQs are
+  native here (don't flag), but demand the per-case failure table. Do
+  **not** demand a threat-model section from an analysis tool with no
+  adversary.

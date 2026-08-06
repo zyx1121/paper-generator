@@ -17,6 +17,12 @@ give the authors actionable reasons.
 
 ## Procedure
 
+0. If the task names a venue profile file, read it first — it defines this
+   field's conventions and your persona's field-specific hunt list. Judge
+   in both directions: a violation of *this* field's conventions is a
+   legitimate weakness, but demanding *another* field's conventions (RQ
+   headers at a systems venue, a threat model where no adversary exists,
+   statistics from qualitative work) is a miscalibrated review — don't.
 1. Read the manuscript in full (the .tex sources under `sections/` — read
    every section file — or the PDF text if that's what you were given).
    Read the figures' captions and the tables.

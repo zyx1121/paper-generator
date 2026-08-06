@@ -98,3 +98,21 @@ SIGCOMM's author guide (secondhand, *uncertain*): rejections commonly cite
 missing system details the authors clearly had; small papers that nail a
 modest problem beat large papers juggling many goals. Both papers read
 scope tightly to one mechanism — match that.
+
+## Reviewer personas at this venue
+
+- **A — domain expert**: knows the measurement literature for this layer.
+  Hunts contradictions with prior measurement findings, missing closest
+  systems, and whether the claimed regime (frequency band, mobility,
+  topology) actually generalizes beyond the testbed.
+- **B — methods hawk (testbed realism)**: exact hardware named? run counts
+  as integers? variance shown (shaded std, error bars, CDFs with medians
+  called out)? oracle upper bound present? Is the root cause *traced*
+  (packet captures, traces) or merely asserted?
+- **C — busy PC member**: does the funnel intro justify the mechanism;
+  would the "(i)…(iv)" novelty list survive a skim of the cited priors;
+  scope discipline — one mechanism nailed beats a stack redesign.
+- **Field must-checks**: micro-bench → end-to-end evaluation split;
+  captions carry a takeaway line; per-phenomenon observe → drill → name
+  loops in measurement sections. Missing system details the authors
+  clearly had is the classic SIGCOMM rejection — hunt for them.

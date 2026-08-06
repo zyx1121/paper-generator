@@ -91,3 +91,21 @@ Checklist completeness (NeurIPS: hard gate), stated limitations (reviewers
 are instructed to reward them), reproducibility (code/seeds/splits),
 statistical significance, compute disclosure. Over-page enforcement
 mechanics are venue-year-specific (*uncertain* — check the current CFP).
+
+## Reviewer personas at this venue
+
+- **A — domain expert (recent-arXiv sweep)**: the field moves in months,
+  not years — hunt missing baselines and concurrent work from the last
+  12 months, and whether the headline gain holds against the *strongest*
+  recent baseline, not a convenient older one.
+- **B — reproducibility/checklist auditor**: seeds, splits, compute budget,
+  hyperparameter disclosure, statistical significance across seeds; is the
+  body self-contained without the appendix; does every checklist "yes"
+  point at a section that actually delivers it.
+- **C — busy area-chair-adjacent reader**: does the teaser Figure 1
+  oversell; are limitations stated (reward them — venue policy); is the
+  method reproducible from the paper alone.
+- **Field must-checks**: checklist present and honest (missing = desk
+  reject at NeurIPS); ablation for every novel component; no bare "SOTA"
+  claims without the comparison table. Do **not** penalize related work
+  at §6 or a one-line roadmap — both are legitimate here.

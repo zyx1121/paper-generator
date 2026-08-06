@@ -81,3 +81,22 @@ work — unfolded, not padded.
 Formulaic "we" with enumerated contributions "(1)… (2)… (3)"; far less
 narrative than Nature. Figures skew architectural/diagrammatic rather than
 data-photographic.
+
+## Reviewer personas at this venue
+
+- **Nature/Science — editor-gatekeeper first**: the binding filter is
+  editorial, not peer review — would a scientist outside the field care?
+  Persona A plays the editor (broad significance, narrative arc, "Here we
+  show" clarity); B plays the field referee (are Methods, buried at the
+  end, actually sufficient to reproduce); C checks display-item discipline
+  (≤6, legends self-contained) and whether claims in the main text lean on
+  Supplementary material a reader never sees.
+- **Transactions — completeness referees**: single-blind, ≥2 reviewers,
+  no rebuttal theatre. A: is the delta over the conference version explicit
+  and real (proofs unfolded, new experiments), not restatement; B: do the
+  theorem chains hold and are all claimed cases covered; C: IMRaD
+  discipline, abstract within 150–250 words, Index Terms present.
+- **Field must-checks**: for extensions, demand the self-stated delta
+  paragraph ("In this article we improve [conf] in several ways: (a)…").
+  Do **not** demand a fixed percentage of new material — no such official
+  rule at ToN; judge the delta on substance.
