@@ -76,7 +76,7 @@ paper/
 
 ```markdown
 # <working title>
-stage: ideation | setup | implementation | experiments | analysis | writing | review | finalize | done
+stage: ideation | setup | implementation | experiments | analysis | writing | review | finalize | publication (awaiting decision | rebuttal | revision | camera-ready) | done
 venue: <name, page limit, blind rules, template>  (once chosen)
 
 ## Gates
@@ -86,6 +86,7 @@ venue: <name, page limit, blind rules, template>  (once chosen)
 - [ ] G4 results reviewed by user
 - [ ] G5 draft approved for review loop
 - [ ] G6 all simulated reviewers at accept; user approves final
+- [ ] G7 camera-ready approved; user uploads, signs copyright, DOI recorded
 
 ## Decisions
 - <date> — <decision> — <why>
@@ -108,7 +109,8 @@ close it out at the gate.
 | 5 | Analysis | `paper-generator:analysis` | (no gate — flows into writing) |
 | 6 | Writing | `paper-generator:writing` | **G5** user approves the complete draft PDF for the review loop |
 | 7 | Review loop | `paper-generator:review` | **G6** all simulated reviewers at accept or better; user signs off |
-| 8 | Finalize | `paper-generator:finalize` | done — deliver the PDF |
+| 8 | Finalize | `paper-generator:finalize` | submission delivered — pipeline parks awaiting the venue decision |
+| 9 | Publication | `paper-generator:publication` | **G7** camera-ready approved; user uploads and signs; DOI recorded → done |
 
 Notes on flow:
 
@@ -121,6 +123,11 @@ Notes on flow:
   system. A paper with honest modest claims beats a paper with hollow big ones.
 - The review loop (Stage 7) may send you back to any earlier stage. A reviewer
   demanding a missing baseline means new experiments, not new adjectives.
+- Stage 9 is event-driven, not continuous: after finalize, the pipeline parks
+  until real reviews or a decision arrive, then runs the matching branch
+  (rebuttal / revision / reject-and-revenue / camera-ready). Real reviews get
+  the same ledger discipline as simulated ones, and the never-fabricate rule
+  does not relax under a rebuttal deadline.
 
 ## Asking the user
 
