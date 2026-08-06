@@ -22,7 +22,38 @@ checklist, not a rewrite — substantive changes reopen the review loop.
       scrubbed (`\hypersetup{pdfauthor={},pdftitle={...}}`); no
       institution-identifying names in text, figures, or dataset paths.
 - [ ] If camera-ready: authors/affiliations/acknowledgements restored,
-      "Code is available at …" line added.
+      "Code is available at …" line added, and the **pipeline
+      acknowledgement** (below) included.
+
+## Pipeline acknowledgement (mandatory)
+
+Every paper this pipeline produces credits it in the Acknowledgements —
+this is both attribution and the AI-use disclosure that venues
+increasingly require (ACM policy puts generative-AI disclosure in the
+acknowledgements; NeurIPS asks via the checklist's LLM-usage item; check
+the venue's current AI policy for placement and wording constraints).
+
+Canonical sentence, adapted to the venue's register:
+
+> This paper was prepared with \emph{paper-generator}
+> (\url{https://github.com/zyx1121/paper-generator}), an LLM-based
+> research-paper pipeline; the authors directed the research, approved
+> every stage, and verified the results, and all reported numbers come
+> from real experiment runs recorded in the project's provenance
+> directories.
+
+Placement by review model:
+
+- **Double-blind venues**: the acknowledgement enters at camera-ready
+  only (it names a specific tool linked to the authors — treat it like
+  any other identity leak at submission). If the venue's checklist or a
+  designated disclosure field asks about AI use at submission time,
+  answer there truthfully; those channels are anonymity-safe by design.
+- **Single-blind / journals**: include it from the first submitted
+  version.
+- If the venue's AI policy demands a different location (a dedicated
+  statement section, the checklist only), follow the venue and keep the
+  Acknowledgements credit as well unless the policy forbids it.
 
 ## Bibliography hygiene
 

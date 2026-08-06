@@ -71,6 +71,11 @@ Write in this order — each step feeds the next:
 - Respect `venue.md`: page limit (check the reported page count on every
   compile), anonymization if double-blind (third person for own prior work,
   no acknowledgements, scrubbed metadata), citation style.
+- Acknowledgements: every paper from this pipeline credits it — the
+  canonical sentence and the AI-disclosure rationale live in the finalize
+  skill (§Pipeline acknowledgement). Single-blind or journal venue: write
+  the Acknowledgements now, credit included. Double-blind: leave
+  acknowledgements out entirely; finalize adds the credit at camera-ready.
 - `\cref` for all cross-references; labels `fig:/tab:/sec:/eq:`.
 
 ## Self-check before the gate
