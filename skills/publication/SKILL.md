@@ -17,6 +17,31 @@ fires. Real reviews are archived verbatim in `reviews/venue/round-N/`
 before anything else touches them: they are the most valuable ground truth
 the pipeline ever receives about its own blind spots.
 
+## Calibration entries
+
+That ground truth only pays off if it is written where the next round looks:
+`paper/reviews/calibration.md` is the file the review skill reads before it
+spawns personas (review SKILL §1). Entries are instructions to a future
+reviewer, not regret. One bullet per blind spot, three fields:
+
+- **Missed** — what the real reviewer caught and the simulated loop did not,
+  concretely enough to search for (name the system, baseline, convention).
+- **Category** — `missing-prior-art` / `rigor` / `clarity` /
+  `field-convention`.
+- **Next time** — which persona (A/B/C) checks it, and how.
+
+```markdown
+- **Missed:** zeropod — a GitHub checkpoint/restore shim with no paper —
+  is the closest prior work; the simulated loop only surfaced it in round 3.
+  **Category:** missing-prior-art
+  **Next time:** Reviewer A searches GitHub/HN/vendor blogs for unpublished
+  implementations of the core mechanism before reading related work, and
+  treats a working repo as prior art.
+```
+
+Append-only and project-local; entries stay valid across venues, and the
+user can seed the next paper with a copy.
+
 ## Branch 1 — Rebuttal / author response
 
 Same ledger discipline as the simulated loop (review skill §2–§4), with
@@ -30,6 +55,11 @@ three real-world differences:
   never-fabricate rule does not relax under deadline pressure.
 - **Every promised change is a debt** tracked in the ledger; the
   camera-ready (or the resubmission) must show it paid.
+
+While triaging, mark every real point the simulated loop never raised and
+write it to `reviews/calibration.md` (§Calibration entries) before drafting
+the response — that pass is cheapest while the reviews are still in front
+of you.
 
 Draft the response, walk the user through contested points with a
 recommendation each, and let the user submit it.
@@ -47,9 +77,11 @@ partially.
 ## Branch 3 — Reject
 
 - Harvest first: fold each real-review point into the same
-  must-fix/should-fix/contest triage as a simulated round. Points the
-  simulated reviewers missed get a note in STATE.md — they are calibration
-  data for the review skill's personas.
+  must-fix/should-fix/contest triage as a simulated round. Every point the
+  simulated reviewers missed becomes an entry in `reviews/calibration.md`
+  (§Calibration entries) — a reject is the pipeline's richest calibration
+  signal, and the file is what makes the next paper's round 1 sharper.
+  Record the decision itself in STATE.md; the blind spots go in calibration.
 - Re-venue: update `venue.md` (new venue, new deadline, possibly a new
   profile — re-run the writing deltas if the field tier changes), and
   check the new venue's resubmission and concurrent-submission policies.
