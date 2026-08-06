@@ -8,7 +8,8 @@
   ⚡ Skill: analysis       → paper/figures/*.pdf
   ⚡ Skill: writing        → paper/manuscript/main.tex  (G5 draft)
   ⚡ Agent: reviewer × 3   → loop until all three accept (G6)
-  ⚡ Skill: finalize       → camera-ready PDF
+  ⚡ Skill: finalize       → submission PDF
+  ⚡ Skill: publication    → rebuttal · camera-ready (G7, when the decision lands)
 ✓ paper/manuscript/main.pdf, all three reviewers at accept
 ```
 
@@ -41,14 +42,15 @@ Start with `/paper-generator:paper <your idea>` and talk it through. State persi
 in `paper/STATE.md`, so running the command with no arguments in a later session
 resumes where you left off. Every stage is also a standalone skill under the
 `paper-generator:` prefix: `ideation`, `setup`, `implementation`, `experiments`,
-`analysis`, `writing`, `review` (mock-review any draft), `finalize`.
+`analysis`, `writing`, `review` (mock-review any draft), `finalize`,
+`publication` (rebuttal, revision, camera-ready — when real reviews arrive).
 
 ## What it gives you
 
 | Component | What it does |
 |---|---|
-| `skills/paper` | Orchestrator: drives all 8 stages, the gates, the `paper/STATE.md` protocol |
-| `skills/ideation` … `skills/finalize` | One skill per stage, each usable standalone |
+| `skills/paper` | Orchestrator: drives all 9 stages, the gates, the `paper/STATE.md` protocol |
+| `skills/ideation` … `skills/publication` | One skill per stage, each usable standalone |
 | `agents/reviewer` | Simulated PC reviewer: 3 personas (domain expert, methods hawk, informed outsider), structured review form |
 | `agents/copyeditor` | In-place prose editor that enforces the style rulebook without touching technical content |
 | `mcp/paper_tools.py` | Zero-dependency MCP server: `latex_compile` · `render_figure` · `arxiv_search` · `scholar_search` · `dblp_bibtex` |
@@ -65,8 +67,10 @@ flowchart LR
     analysis --> writing
     writing -->|"G5 draft"| review["review loop"]
     review -->|"G6 all accept"| finalize
-    finalize --> pdf([pdf])
+    finalize -->|submit| publication
+    publication -->|"G7 camera-ready"| pdf([doi])
     review -.->|"must-fix → back to any stage"| implementation
+    publication -.->|"reject → harvest + re-venue"| review
 ```
 
 Gates are hard stops: irreversible or judgment calls (proposal, venue + plan,

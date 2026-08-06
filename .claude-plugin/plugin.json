@@ -2,8 +2,8 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "paper-generator",
   "displayName": "Paper Generator",
-  "version": "0.4.0",
-  "description": "Idea-to-paper pipeline: discuss a research idea, pick a venue, set up experiments, implement, evaluate, write a LaTeX paper, and iterate with simulated peer review until acceptance.",
+  "version": "0.5.0",
+  "description": "Idea-to-paper pipeline: discuss a research idea, pick a venue, set up experiments, implement, evaluate, write a LaTeX paper in the target field's own conventions, iterate with simulated peer review until acceptance, then handle rebuttal and camera-ready when the real decision lands.",
   "author": {
     "name": "Loki Zhan",
     "email": "yongxiang.zhan@outlook.com",
