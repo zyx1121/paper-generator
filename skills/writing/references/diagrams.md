@@ -48,6 +48,65 @@ sets another text font, load the same font package in the diagram preamble
 | who talks to whom over time | message-sequence chart (lifelines + arrows) |
 | deployment or trust boundaries | block diagram + dashed `fit` boxes |
 
+## Field figure vocabulary
+
+The rules above are field-independent; *what* to draw, and how much of it, is
+not. The authority is the venue profile recorded in `paper/venue.md` (see
+`venues/README.md`) — where it disagrees with this section, the profile wins.
+This is the at-a-glance version for while you are drawing, and it covers data
+figures too, because the figure/table mix is one decision, not two.
+
+**Systems** (OSDI, SOSP, ATC, EuroSys; ICDCS, Middleware). Figure 1 is an
+architecture overview or a motivating measurement, and must be comprehensible
+alone. Observed range: 12–19 figures with 0–1 tables — specs live in prose at
+the USENIX tier, while the IEEE tier adds a results table. Line charts for
+latency-vs-load, bars for memory and cost, CDFs inside deep-dive subsections.
+**Captions are descriptive labels, not claim sentences**; the finding is
+stated in prose before the figure is walked.
+
+**Networking** (SIGCOMM, NSDI, MobiCom, MobiSys, INFOCOM). Figure 1 is a
+two-panel contrast: "(a) Conventional [fails] (b) OurSystem [works]".
+Figure-heavy and table-light — one SIGCOMM paper ran 16 figures and 0 tables;
+tables appear only for dense numeric grids. CDF culture is real: plot the
+distribution and name the median in prose. Variance is drawn, not asserted —
+shaded ±std bands, 2D std ellipses for two-axis scatter, and an integer run
+count in the caption or text ("100 experiments"), never "several runs".
+Captions here often add a one-line takeaway after the descriptive label.
+
+**ML** (NeurIPS, ICML, ICLR). Figure 1 is a **teaser** — mechanism sketch,
+pipeline contrast, or a display of the phenomenon being challenged — and has
+to sell the idea before any result appears. The main results **table** is the
+load-bearing item (bold best, ±std over seeds); figures are multi-panel
+comparison curves and overlaid predicted-vs-actual lines. Single-column
+format: design full-width figures at ≈5.5in, not the 3.3in `\columnwidth`
+the style rules below assume.
+
+**Security** (S&P, USENIX Sec, CCS, NDSS). Split by subtype. Tool papers open
+with a pipeline diagram and are carried by a large capability-comparison
+table with a symbol legend (✓/✗) defined in the caption, plus an enumerated
+per-case failure list *(uncertain — one tool paper read)*. Attack papers open
+with an attack-flow or protocol-message diagram (an MSC fits) and put
+distribution plots in the separate deployment-measurement section. Figures are
+a known anonymization leak: no author-identifying paths, and no full CVE
+numbers in the review version.
+
+**SE** (ICSE, FSE, ASE). Result **tables keyed to the RQs** are the primary
+display items and figures are secondary: a tool/pipeline diagram, plus per-RQ
+distribution plots *(uncertain — thin sample)*. Every display item should be
+reachable from an RQ; an unattached figure reads as padding here.
+
+**HCI** (CHI, UIST, CSCW). Artifact papers are screenshot-driven: annotated UI
+captures plus a walkthrough figure whose step numbers match the numbered
+operation steps in the System section. Qualitative papers run figure-light —
+a method or timeline diagram and little else, because quotes are the evidence
+*(uncertain — pattern from 2 papers)*. Single-column, so full text width.
+
+**Journals**. Nature/Science: **≤6 display items total**, a hard budget that
+forces panel merging; legends under 250 words and self-contained, since they
+carry method detail the main text drops. IEEE/ACM Transactions: figures skew
+architectural and diagrammatic rather than photographic, matching the strict
+IMRaD body.
+
 ## Style rules
 
 - **Define styles once** with a `block/.style` list in the picture options;
@@ -134,5 +193,6 @@ if the prose walks through them.
 - [ ] every meaningful arrow labeled; solid/dashed distinction captioned
 - [ ] referenced from the text, with a prose walkthrough that follows the
       numbered steps
-- [ ] caption states what the reader should see, not just what the figure is
+- [ ] caption follows the field's convention — descriptive label or label
+      plus takeaway line (see field vocabulary above / the venue profile)
 - [ ] styles defined once; fonts not below `\scriptsize`; no decoration
