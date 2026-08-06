@@ -39,9 +39,19 @@ the user with a recommendation.
 
 ### 1. Spawn three reviewers
 
+Before spawning, read `paper/reviews/calibration.md` if it exists. It is the
+pipeline's record of blind spots — points a real reviewer caught that these
+personas' predecessors missed. Route each entry to the persona named in its
+"next time" field and paste it into that reviewer's prompt as a standing
+order: *"Real review on an earlier paper caught X and your predecessor
+missed it — check for that first."* An entry the current manuscript cannot
+possibly hit (wrong subfield, wrong contribution type) is skipped, not
+rewritten.
+
 Launch three parallel `reviewer` subagents against the current PDF/source,
 each with a distinct persona. Pass each one: persona + venue + manuscript
-path + the venue profile path from `paper/venue.md`.
+path + the venue profile path from `paper/venue.md` + its calibration
+entries.
 
 The three-persona skeleton is universal; **the specialization comes from
 the profile's "Reviewer personas at this venue" section**, which says what
@@ -108,6 +118,15 @@ claim–citation audit (step 0) first. Spawn the same three personas, given
 the revised manuscript **and** the previous round's reviews plus
 `response.md` with its ledger, instructed to verify whether each of their
 points was addressed and to score afresh.
+
+Closing the round, log systematic misses too: anything a later round
+surfaced that round 1 should have caught (the closest prior work found in
+round 3, a field convention nobody checked) is a blind spot even though no
+real reviewer was involved. Append it to `paper/reviews/calibration.md` now
+— one bullet per blind spot, carrying **what was missed**, its **category**
+(`missing-prior-art` / `rigor` / `clarity` / `field-convention`), and
+**which persona checks what next time**. Do not wait for a venue decision to
+start the file.
 
 ## Termination
 

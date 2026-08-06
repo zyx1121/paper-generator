@@ -70,7 +70,12 @@ paper/
 ├── figures/            # figure scripts (*.py) and rendered PDFs
 ├── manuscript/         # main.tex, sections/, refs.bib, venue style files
 └── reviews/            # round-N/: reviewer-{A,B,C}.md, response.md, citation-audit.md
+    └── calibration.md  # blind spots real reviewers caught; read before each round
 ```
+
+At setup, if the user has a `calibration.md` from a previous paper, copy it
+in as a seed — the blind spots carry across papers, and starting empty
+repeats them.
 
 ## STATE.md format
 
