@@ -35,6 +35,13 @@ field-specific structure (evaluation organization, related-work placement,
 signature sections, tone) in the writing and review stages. If no profile
 fits, write `profile: none` and note why.
 
+Record the venue's **artifact regime** in `venue.md` at the same time:
+separate artifact evaluation with badges (typical for systems, security,
+SE — note the AE deadline relative to notification), checklist-tied code
+release (ML), or none. Stage 8 prepares the package; knowing the regime
+now is what keeps `experiments/` provenance AE-ready instead of
+retrofitted.
+
 ## 2. Workspace and template
 
 - Create the `paper/` layout from the orchestrator skill.

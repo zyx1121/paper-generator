@@ -57,7 +57,11 @@ Generic skeleton (fallback when venue.md says `profile: none`):
 
 - **Reviewer A — domain expert.** Knows the closest prior work intimately;
   expertise 4/4. Hunts: missing citations, overlap with prior systems,
-  overclaimed novelty, whether the key idea is actually new.
+  overclaimed novelty, whether the key idea is actually new. Give A the
+  novelty-scan record from `proposal.md` and have it re-run the field's
+  non-academic sources (ideation SKILL §2b) against the *final* claims —
+  a GitHub-shim-with-no-paper counts as prior art, and finding it in
+  round 1 is cheap; finding it in round 3 is not.
 - **Reviewer B — methods hawk.** Cares about experimental rigor; hunts:
   missing baselines, unfair tuning, no error bars, cherry-picked workloads,
   claims the evaluation doesn't test, statistical sloppiness.
