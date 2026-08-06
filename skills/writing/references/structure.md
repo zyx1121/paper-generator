@@ -4,6 +4,13 @@ Distilled from Simon Peyton Jones ("How to Write a Great Research Paper"),
 Jennifer Widom ("Tips for Writing Technical Papers"), the SIGPLAN Empirical
 Evaluation Guidelines, and current venue author guides.
 
+**This file is the generic skeleton.** Every field has its own dialect —
+evaluation organization, related-work placement, signature sections, tone —
+and papers that follow the wrong field's conventions read as foreign to
+their reviewers. The field profiles live in [venues/](venues/README.md);
+the profile recorded in `paper/venue.md` **overrides** anything here that
+disagrees with it.
+
 ## Skeleton and proportions (12-page two-column conference paper)
 
 | Section | Length | Notes |
@@ -68,9 +75,14 @@ The introduction does exactly two things: **describe the problem** and
 
 ## Evaluation
 
-- Open with explicit research questions: "Our evaluation answers: RQ1 …
-  RQ2 …". One subsection per RQ; each ends with a bolded takeaway that
-  answers it.
+- Organize per the venue profile — this is one of the strongest field
+  tells. **RQ-numbered subsections are SE dialect** (also security tool
+  papers); top systems/networking papers organize by
+  setup → per-component → end-to-end → ablation instead. The experiment
+  *plan* still uses RQs internally (plan.md); whether they surface as
+  section headers is the venue's call.
+- Either way, each unit of evaluation ends with a visually marked takeaway
+  that answers what it set out to test.
 - First subsection is always **Experimental Setup**: hardware, versions,
   workloads, baselines and how they were tuned, metrics and why, number of
   runs/seeds and variance reporting.
@@ -82,7 +94,10 @@ The introduction does exactly two things: **describe the problem** and
 - Ablations attribute the gain to each novel component; scalability curves
   vary the interesting dimension.
 - Every figure/table is referenced from the text, placed `[t]`, with a
-  self-contained caption that states the finding, not just the topic.
+  self-contained caption. Whether the caption states the finding or just
+  labels the content is field-dependent (networking papers add a takeaway
+  line; top systems papers use descriptive labels) — check the venue
+  profile before applying the old "caption states the finding" rule.
 
 ## Related Work
 

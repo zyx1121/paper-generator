@@ -28,6 +28,13 @@ facts and submission rules (anonymization requirements included — they shape
 the manuscript from day one). If the venue is double-blind, the manuscript is
 anonymous from the first draft.
 
+Also record the matching **venue profile** in `paper/venue.md` (e.g.
+`profile: skills/writing/references/venues/systems.md`) — pick from the
+index at `skills/writing/references/venues/README.md`. The profile drives
+field-specific structure (evaluation organization, related-work placement,
+signature sections, tone) in the writing and review stages. If no profile
+fits, write `profile: none` and note why.
+
 ## 2. Workspace and template
 
 - Create the `paper/` layout from the orchestrator skill.
