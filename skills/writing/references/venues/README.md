@@ -93,20 +93,22 @@ Encoded per-profile; this table is the orientation map.
 
 | Axis | Systems | Networking | ML | Security | SE | HCI |
 |---|---|---|---|---|---|---|
-| Columns / body pages | 2-col, 11–12 pp | 2-col, 12 pp | **1-col**, 8–10 pp | 2-col, 13 pp | 2-col, 10–12 pp | 1-col, word-count 5–12k |
-| Related work | late (before Concl.) | late | varies §2–§6 | attack: §2; tool: late | varies | **early (after Intro)** |
-| Evaluation organized by | setup → components → end-to-end → ablation | micro-bench → end-to-end | dataset/model- or question-named | mirrors design §; tools use RQs | **RQ subsections** | study type (usability / qualitative) |
-| Signature section | none | measurement study | checklist + appendix | **Threat Model**, Ethics | **Threats to Validity** | Positionality; (anti-)Implications |
+| Columns / body pages | 2-col, 11–12 pp | 2-col, 9–12 pp | **1-col**, 8–9 pp | 2-col, 12–13 pp | ICSE/ASE 2-col 10 pp; **FSE 1-col 18 pp** | 1-col review, word-count 5–12k |
+| Related work | USENIX: late; IEEE tier often §2–3 | late | varies §2–§6 | early / merged / late by subtype | varies | **early (after Intro)** |
+| Evaluation organized by | setup → components → end-to-end → ablation | wireless: micro → end-to-end; wired: by evidence source | dataset/model- or question-named | mirrors design §; tools use RQs | **RQ subsections** | study type (usability / qualitative / experiment) |
+| Signature section | none | measurement study | checklist + appendix | **Threat Model** (named before the technical core), Ethics | **Threats to Validity** | Positionality; (anti-)Implications |
 | Numbers rhetoric | rounded multipliers (2–4×) | units + × / % | mixed; tables ± std | % with denominator ("44 of 46") | % vs baselines | N= everywhere |
 
 Two cross-cutting corrections to folklore, found while building these:
 
-- **RQ-numbered evaluations are an SE convention** (institutionalized in
-  ICSE's own review criteria), also common in security *tool* papers. Top
-  systems/networking papers do not use them — they organize evaluation by
-  setup → per-component → end-to-end → ablation. Do not export RQ headers
-  to systems venues.
+- **RQ-numbered evaluations are an SE community habit** (no longer named in
+  ICSE's review criteria since the 2025 revision), also common in security
+  *tool* papers. Top systems/networking papers do not use them — they
+  organize evaluation by setup → per-component → end-to-end → ablation.
+  Do not export RQ headers to systems venues.
 - **Figure captions in top systems papers are descriptive labels, not
-  claim sentences** (0 of 3 papers read used claim-captions), while
-  networking papers do often add a one-line takeaway. The old
-  "caption states the finding" rule is field-dependent.
+  claim sentences** (0 of 3 papers read used claim-captions). *Wireless*
+  networking papers often add a one-line takeaway; the wired-core NSDI
+  paper read instead tags captions with the evidence source
+  ("[Testbed]"/"[Simulation]"). The old "caption states the finding" rule
+  is field-dependent — check the profile.
