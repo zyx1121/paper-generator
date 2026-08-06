@@ -1,5 +1,9 @@
 # Journal venue profile
 
+> Facts verified: 2026-08-06 — format rules (pages, templates, checklists,
+> deadlines-adjacent mechanics) decay yearly; re-verify against the live CFP
+> before relying on them.
+
 Two regimes that bracket conference culture: Nature/Science short-form
 (inverted narrative) and IEEE/ACM Transactions (strict IMRaD, extended
 conference papers). Grounded in full reads of the Nature chip-placement

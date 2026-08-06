@@ -1,5 +1,9 @@
 # Machine learning venue profile
 
+> Facts verified: 2026-08-06 — format rules (pages, templates, checklists,
+> deadlines-adjacent mechanics) decay yearly; re-verify against the live CFP
+> before relying on them.
+
 Venues: NeurIPS, ICML, ICLR. Grounded in full reads of LoRA (ICLR'22),
 DPO (NeurIPS'23), Chinchilla (NeurIPS'22), Emergent-Abilities-Mirage
 (NeurIPS'23 Outstanding), plus the live checklist/CFP pages.
