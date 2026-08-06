@@ -14,9 +14,14 @@ G5 and enters the review loop.
 
 **Before writing anything, read the references in full:**
 
-- [references/structure.md](references/structure.md) — what goes where, and
-  the per-section formulas (abstract's six moves, SPJ's intro discipline,
-  RQ-driven evaluation, late related work).
+- [references/structure.md](references/structure.md) — the generic
+  skeleton and per-section formulas (abstract's six moves, SPJ's intro
+  discipline, late related work).
+- **The venue profile named in `paper/venue.md`** (from
+  [references/venues/](references/venues/README.md)) — the field's
+  dialect: evaluation organization, related-work placement, signature
+  sections, abstract length and number style, tone. Where it disagrees
+  with structure.md, **the profile wins**.
 - [references/style.md](references/style.md) — the prose rules: active
   voice, given-new flow, consistent terminology, claims calibration, banned
   words, and the reads-as-LLM tells to counter-program.
@@ -37,7 +42,8 @@ Write in this order — each step feeds the next:
    Drawn figures (architecture, state, flow) are produced now, per
    references/diagrams.md — Figure 1 is often one of them.
 3. **Evaluation** — closest to the data, so write it while the analysis is
-   fresh. RQ subsections, setup first, takeaways bolded. Every number
+   fresh. Setup first, organization per the venue profile (RQ subsections
+   only where the field uses them), takeaways visually marked. Every number
    copied from `experiments/`, never from memory.
 4. **Design/Method, then Implementation** (from IMPLEMENTATION_NOTES.md),
    then Background — introduce the running example early.
