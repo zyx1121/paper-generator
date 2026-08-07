@@ -89,6 +89,10 @@ BANNED_TERMS = {
     "feedbacks": "'feedback' is uncountable",
     "researches": "'research' is uncountable",
     "softwares": "'software' is uncountable",
+    "provably": "proof or observation? cite the proof, or write 'verifiably'",
+    "honestly": "self-characterizing — delete; honesty shows in the content",
+    "we report honestly": "self-characterizing — 'we characterize'",
+    "frankly": "self-characterizing — delete",
 }
 
 LLM_TELL_TERMS = {

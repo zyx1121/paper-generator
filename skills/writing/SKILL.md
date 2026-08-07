@@ -91,6 +91,13 @@ Run the revision passes from style.md §Revision passes. Then verify:
 - [ ] every contribution bullet forward-references a section that
       substantiates it, and that section actually does
 - [ ] every figure/table referenced in text, captions state the finding
+- [ ] **after any compression pass** (abstract cut, bullet merge, section
+      shortening): re-verify every surviving number and qualifier against
+      the fuller statement it replaced. Compression is how ranges collapse
+      onto their most favorable endpoint and scope qualifiers ("at low
+      concurrency") silently vanish — a live restyle introduced exactly
+      these two errors into an abstract that three review rounds had
+      already vetted
 - [ ] every number in the text traces to `experiments/` — run `trace_check`
       (manuscript dir vs. `experiments/`) and account for every unmatched
       value it flags: point it at the evidence, mark it as derived/quoted,

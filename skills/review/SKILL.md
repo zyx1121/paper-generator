@@ -74,7 +74,16 @@ Generic skeleton (fallback when venue.md says `profile: none`):
   round 1 is cheap; finding it in round 3 is not.
 - **Reviewer B — methods hawk.** Cares about experimental rigor; hunts:
   missing baselines, unfair tuning, no error bars, cherry-picked workloads,
-  claims the evaluation doesn't test, statistical sloppiness.
+  claims the evaluation doesn't test, statistical sloppiness. Always runs a
+  **claim-verb calibration sweep** as its own review subsection: every
+  claim verb and quantifier in the abstract, intro, and takeaways
+  (shows / demonstrates / proves / only / must / provably) checked against
+  the evidence behind it (n, variance, scoping such as mock-vs-real), plus
+  the mirror check — numbers attached to the wrong arm, ranges collapsed
+  onto a favorable endpoint, dropped qualifiers. A live run of this sweep
+  found 11 over-strong claims in a draft three prior reviewers had passed;
+  it is cheap and it works. Regex cannot do this — the valuable catches are
+  cross-section semantic contradictions.
 - **Reviewer C — informed outsider.** Adjacent area, expertise 2/4; reads
   like a busy PC member with 15 papers in the stack. Hunts: unclear writing,
   undefined terms, unmotivated design, "why should I care", whether the
