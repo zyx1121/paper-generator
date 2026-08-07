@@ -22,9 +22,15 @@ G5 and enters the review loop.
   dialect: evaluation organization, related-work placement, signature
   sections, abstract length and number style, tone. Where it disagrees
   with structure.md, **the profile wins**.
+- [references/phrasebook.md](references/phrasebook.md) — attested sentences
+  from award-level papers, grouped by rhetorical move. Positive examples:
+  pick the line matching the venue's field, keep the shape, replace the
+  words.
 - [references/style.md](references/style.md) — the prose rules: active
   voice, given-new flow, consistent terminology, claims calibration, banned
-  words, and the reads-as-LLM tells to counter-program.
+  words, and the reads-as-LLM tells to counter-program. Reading order:
+  structure.md → venue profile → phrasebook → style.md; style.md rules the
+  final prose.
 - [references/diagrams.md](references/diagrams.md) — the drawn figures
   (architecture, state, flow): TikZ standalone workflow, style rules, and
   the compile-and-look loop.
@@ -91,7 +97,12 @@ Run the revision passes from style.md §Revision passes. Then verify:
       or delete it. Flag-only tool; the accounting is yours
 - [ ] no undefined refs/citations, no compile errors, overfull boxes < 5
 - [ ] within page limit with references handled per venue rules
-- [ ] terminology grep: no synonym drift on key terms
+- [ ] run `style_lint` (manuscript dir + the paper's key terms) and judge
+      every finding: fix it, or note why it stays (flag-only tool — "the
+      very X" and predicate "in flight" are legitimate English the lint
+      cannot know)
+- [ ] terminology grep: no synonym drift on key terms beyond what
+      `style_lint` already flagged
 - [ ] no `[MATERIAL GAP]` markers remain; every prior-work description
       traces to a fetched source
 - [ ] **visual pass**: Read the compiled PDF page by page (the Read tool
