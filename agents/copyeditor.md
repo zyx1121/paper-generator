@@ -50,8 +50,10 @@ With no profile named, apply style.md alone.
    unpacked; old-to-new information flow; emphatic material at sentence end;
    singular over plural for one-to-one relationships.
 4. **Lint.** Banned words (clearly, obviously, very, novel, utilize, in
-   order to, etc.-after-e.g., non-referential "this") and LLM tells (delve,
-   leverage, robust-as-filler, seamless, pivotal, crucial, "not only…but
+   order to, etc.-after-e.g., non-referential "this") and LLM tells per
+   style.md's graded list — ban-outright vocabulary (delve, showcase,
+   underscore, leverage, seamless…), rate-limited words judged by density
+   not presence (crucial, notably, potential…), and ("not only…but
    also" beyond one use, Moreover/Furthermore spam, "It is important to
    note", section-ending restatements, uniform sentence lengths). Articles
    and hyphenation (compound modifiers; "allows to" → "allows X to").

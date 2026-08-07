@@ -100,8 +100,13 @@ LLM_TELL_TERMS = {
     "holistic": "LLM-tell vocabulary — say what is actually covered",
     "multifaceted": "LLM-tell vocabulary — name the facets",
     "pivotal": "LLM-tell vocabulary — 'central' / cut",
-    "crucial": "LLM-tell vocabulary — 'necessary for X' / cut",
+    "crucial": "rate-limited in style.md — legitimate word, judge density",
     "paramount": "LLM-tell vocabulary — 'necessary for X' / cut",
+    "meticulous": "LLM-tell vocabulary (corpus-verified) — rewrite plainly",
+    "commendable": "LLM-tell vocabulary (corpus-verified) — cut",
+    "intricate": "LLM-tell vocabulary (corpus-verified) — say what is complex",
+    "garner": "LLM-tell vocabulary (corpus-verified) — 'receive' / 'get'",
+    "vibrant": "LLM-tell vocabulary (corpus-verified) — cut",
     "landscape": "LLM-tell vocabulary — name the actual set of systems",
     "realm": "LLM-tell vocabulary — name the actual field",
     "tapestry": "LLM-tell vocabulary — rewrite plainly",
@@ -122,7 +127,7 @@ LLM_TELL_TERMS = {
     "studies have shown": "hand-wave — cite the studies",
     "moreover": "sentence-initial connective spam — link old-to-new instead",
     "furthermore": "sentence-initial connective spam — link old-to-new instead",
-    "additionally": "sentence-initial connective spam — link old-to-new instead",
+    "additionally": "rate-limited in style.md — legitimate word, judge density",
     "overall": "sections should end on new substance, not restatement",
 }
 
