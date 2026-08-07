@@ -21,7 +21,7 @@
 
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-d97757)](https://github.com/zyx1121/paper-generator) &nbsp;[![version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fzyx1121%2Fpaper-generator%2Fmain%2F.claude-plugin%2Fplugin.json&query=%24.version&label=version&color=111111)](.claude-plugin/plugin.json) &nbsp;[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](#license)
 
-Writing a paper end to end means playing a dozen roles at once: idea whisperer, experiment engineer, LaTeX typesetter, and your own harshest reviewer. This plugin plays all of them, but refuses to shortcut the part that matters: every number in the draft has to trace back to a real experiment run, and every draft has to survive a simulated program committee before it counts as done.
+Writing a paper end to end means playing a dozen roles at once: idea whisperer, experiment engineer, LaTeX typesetter, and your own harshest reviewer. This plugin plays all of them, but refuses to shortcut the part that matters: every number in the draft has to trace back to a real experiment run, and every draft has to survive a simulated program committee before it counts as done. And because every field has its own idea of what a paper looks like, the pipeline writes — and reviews — in the target venue's dialect, not a generic one.
 
 ## Install
 
@@ -51,9 +51,12 @@ resumes where you left off. Every stage is also a standalone skill under the
 |---|---|
 | `skills/paper` | Orchestrator: drives all 9 stages, the gates, the `paper/STATE.md` protocol |
 | `skills/ideation` … `skills/publication` | One skill per stage, each usable standalone |
-| `agents/reviewer` | Simulated PC reviewer: 3 personas (domain expert, methods hawk, informed outsider), structured review form |
-| `agents/copyeditor` | In-place prose editor that enforces the style rulebook without touching technical content |
-| `mcp/paper_tools.py` | Zero-dependency MCP server: `latex_compile` · `render_figure` · `arxiv_search` · `scholar_search` · `dblp_bibtex` · `fetch_paper` (full text via arXiv HTML → ar5iv → PDF, with User-Agent fallback) · `trace_check` (flags every number in the .tex with no match in the evidence files — unmatched ≠ fabricated, but every unmatched value should have been looked at by a human) · `style_lint` (flags banned words and LLM tells, em-dash density, uniform sentence/paragraph length, unquantified claims, terminology drift — flag-only, a hit is a line a human has to look at, not an error) |
+| `skills/writing/references/venues/` | **Venue profiles**: 7 field dialects (systems, networking, ML, security, SE, HCI, journals) distilled from close reads of 25+ award-level papers and live CFPs — structure, evaluation shape, tone, reviewer expectations, desk-reject triggers, per-field pipeline scope. Every hard format fact carries a `Facts verified:` date and gets re-checked against the live CFP at venue lock |
+| `skills/writing/references/` | The style rulebook: `structure.md` (generic skeleton the profile overrides), `style.md` (prose rules + evidence-graded LLM-tells list), `phrasebook.md` (attested sentences from award papers, by rhetorical move), `diagrams.md` (TikZ workflow + field figure vocabulary) |
+| `agents/reviewer` | Simulated PC reviewer: 3 personas specialized per venue profile (what a methods hawk hunts at NeurIPS ≠ at SOSP), fed the calibration file of blind spots real reviews exposed; B always runs a claim-verb calibration sweep |
+| `agents/copyeditor` | In-place prose editor: style rulebook + the venue profile's tone overlay, without touching technical content |
+| `mcp/paper_tools.py` | Zero-dependency MCP server: `latex_compile` · `render_figure` · `arxiv_search` · `scholar_search` · `dblp_bibtex` · `fetch_paper` (full text, arXiv → ar5iv → PDF fallbacks) · `trace_check` (numbers ↔ evidence audit, flag-only) · `style_lint` (banned words, LLM tells, uniformity, terminology drift — flag-only) |
+| `scripts/ci_checks.py` | Repo CI, runnable locally: links, cross-refs, plugin manifest, skill frontmatter, Python syntax, MCP self-tests |
 
 ## Pipeline
 
@@ -80,12 +83,16 @@ must-fix from the review loop can send the pipeline back to any earlier stage.
 
 ## Principles baked in
 
-- **No fabricated data, ever.** Every number in the paper traces to a real run under `paper/experiments/`, with per-run provenance (command, config, seed, environment, commit hash). No user override.
+- **No fabricated data, ever.** Every number in the paper traces to a real run under `paper/experiments/`, with per-run provenance (command, config, seed, environment, commit hash). No user override. Evidence the pipeline cannot produce (human subjects, vendor disclosure) is declared at the gate, never simulated.
 - **Claims are refutable.** Contributions are written as checkable claims, each forward-referenced to the evidence that substantiates it, and the review loop attacks exactly that mapping.
+- **Papers read like their field's papers.** The venue profile overrides the generic skeleton, reviewers judge by that field's own bar, and every profile fact is grounded in a primary source or marked *uncertain*.
+- **The loop learns.** Blind spots that real reviews expose go into `reviews/calibration.md`, and the next round's personas check them first.
 
 ## Contributing
 
 Issues and PRs welcome: ground rules in [CONTRIBUTING.md](https://github.com/zyx1121/.github/blob/main/CONTRIBUTING.md).
+Run `python3 scripts/ci_checks.py` before pushing — it is the same set of
+checks CI runs.
 
 ## License
 
