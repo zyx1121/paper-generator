@@ -14,6 +14,9 @@ Tools:
                    URL) with mirror and User-Agent fallbacks
   trace_check    — mechanical no-fabrication audit: every number in the .tex
                    sources that has no match in the evidence files
+  style_lint     — flag-only prose lint over the .tex sources: banned words and
+                   LLM tells, em-dash density, sentence/paragraph uniformity,
+                   unquantified weasel words, terminology drift
 
 Requires only the Python 3.9+ standard library. Network is used only by
 arxiv_search / scholar_search / dblp_bibtex / fetch_paper. `pdftotext`
@@ -25,6 +28,7 @@ Run `python3 paper_tools.py --self-test` for the offline unit tests.
 import bisect
 import html.parser
 import json
+import math
 import os
 import re
 import shutil
@@ -42,6 +46,117 @@ SERVER_VERSION = "0.1.0"
 PROTOCOL_VERSION = "2024-11-05"
 
 USER_AGENT = f"{SERVER_NAME}/{SERVER_VERSION} (paper-generator Claude Code plugin)"
+
+
+# ------------------------------------------------- style_lint vocabulary
+#
+# EDIT HERE. `skills/writing/references/style.md` is the authority for every
+# table below: BANNED_TERMS mirrors its "Words → Banned" bullet, LLM_TELL_TERMS
+# its "Reads-as-LLM tells → Vocabulary / Structural tics" section, WEASEL_TERMS
+# its "Claims calibration → Quantify instead of qualify" rule. When a word is
+# added or dropped there, mirror the change here (and vice versa) — a lint that
+# drifts from the rulebook is worse than no lint. The thresholds below are
+# deliberately loose: this tool is flag-only, and on a prose heuristic a miss
+# beats a false alarm.
+#
+# Single-word entries also match the -s/-es/-ed/-d/-ing/-ly inflections;
+# multi-word entries match across line breaks. Values are the note shown to
+# whoever has to judge the hit.
+
+BANNED_TERMS = {
+    "clearly": "asserts what the evidence should show — cut it or prove it",
+    "obviously": "asserts what the evidence should show — cut it or prove it",
+    "easily": "asserts what the evidence should show — cut it or prove it",
+    "trivially": "asserts what the evidence should show — cut it or prove it",
+    "of course": "asserts what the evidence should show — cut it",
+    "very": "intensifier without content — cut it or give the number",
+    "really": "intensifier without content — cut it or give the number",
+    "extremely": "intensifier without content — cut it or give the number",
+    "quite": "intensifier without content — cut it or give the number",
+    "novel": "the contribution list establishes novelty, not adjectives",
+    "innovative": "the contribution list establishes novelty, not adjectives",
+    "utilize": "use 'use'",
+    "in order to": "use 'to'",
+    "due to the fact that": "use 'because'",
+    "a lot of": "vague quantity — give the number",
+    "for various reasons": "give the reasons",
+    "thing": "name the thing",
+    "stuff": "name the thing",
+    "existing work": "'previous work' is the term of art",
+    "related works": "'related work' is uncountable",
+    "allows to": "ungrammatical — 'allows X to Y' / 'makes it possible to Y'",
+    "informations": "'information' is uncountable",
+    "feedbacks": "'feedback' is uncountable",
+    "researches": "'research' is uncountable",
+    "softwares": "'software' is uncountable",
+}
+
+LLM_TELL_TERMS = {
+    "delve": "LLM-tell vocabulary — rewrite plainly",
+    "showcase": "LLM-tell vocabulary — 'show' / 'present'",
+    "underscore": "LLM-tell vocabulary — 'show' / cut",
+    "leverage": "LLM-tell vocabulary — use 'use'",
+    "seamless": "LLM-tell vocabulary — say what is actually automatic",
+    "holistic": "LLM-tell vocabulary — say what is actually covered",
+    "multifaceted": "LLM-tell vocabulary — name the facets",
+    "pivotal": "LLM-tell vocabulary — 'central' / cut",
+    "crucial": "LLM-tell vocabulary — 'necessary for X' / cut",
+    "paramount": "LLM-tell vocabulary — 'necessary for X' / cut",
+    "landscape": "LLM-tell vocabulary — name the actual set of systems",
+    "realm": "LLM-tell vocabulary — name the actual field",
+    "tapestry": "LLM-tell vocabulary — rewrite plainly",
+    "testament": "LLM-tell vocabulary — rewrite plainly",
+    "foster": "LLM-tell vocabulary — 'enable' / 'cause'",
+    "elevate": "LLM-tell vocabulary — 'raise' / 'improve' + a number",
+    "navigate": "LLM-tell vocabulary — say what is actually done",
+    "compelling": "LLM-tell vocabulary — give the evidence instead",
+    "groundbreaking": "LLM-tell vocabulary — the contribution list does this",
+    "robust": "filler adjective unless defined — say robust to what",
+    "valuable insights": "LLM-tell phrase — state the insight",
+    "plays a vital role": "LLM-tell phrase — say what it does",
+    "cannot be overstated": "LLM-tell phrase — cut",
+    "marks a significant shift": "LLM-tell phrase — cut or quantify",
+    "it is important to note that": "LLM-tell phrase — delete, keep the clause",
+    "serves as": "'is' is usually right",
+    "functions as": "'is' is usually right",
+    "studies have shown": "hand-wave — cite the studies",
+    "moreover": "sentence-initial connective spam — link old-to-new instead",
+    "furthermore": "sentence-initial connective spam — link old-to-new instead",
+    "additionally": "sentence-initial connective spam — link old-to-new instead",
+    "overall": "sections should end on new substance, not restatement",
+}
+
+# Adjectives/adverbs of degree that are only legitimate next to a number
+# (style.md: "much faster" → "3.2x faster on PARSEC").
+WEASEL_TERMS = {
+    "significant": "only with the statistical test, or a number",
+    "substantial": "quantify it",
+    "greatly": "quantify it",
+    "considerable": "quantify it",
+    "dramatically": "quantify it",
+    "drastically": "quantify it",
+    "vastly": "quantify it",
+    "markedly": "quantify it",
+    "massively": "quantify it",
+    "much faster": "quantify it",
+    "much slower": "quantify it",
+    "far better": "quantify it",
+    "low overhead": "quantify it",
+    "high accuracy": "quantify it",
+    "scales well": "quantify it",
+}
+
+# Thresholds. Density is per 1000 words; CV is std/mean of the per-section
+# sentence (or paragraph) lengths — LLM prose clusters around one shape, so a
+# *low* CV is the smell. Minimum counts keep short sections out of the stats.
+EM_DASH_PER_1K_LIMIT = 1.5
+MIN_WORDS_FOR_DENSITY = 300
+SENTENCE_CV_MIN = 0.35
+MIN_SENTENCES_FOR_CV = 8
+PARAGRAPH_CV_MIN = 0.30
+MIN_PARAGRAPHS_FOR_CV = 5
+MIN_WORDS_PER_PARAGRAPH = 15
+MAX_STYLE_FINDINGS = 300
 
 
 # ---------------------------------------------------------------- LaTeX
@@ -985,6 +1100,416 @@ def tool_trace_check(args):
     return result
 
 
+# ------------------------------------------------------------- style lint
+
+# Flag-only by design, exactly like trace_check: a hit is NOT an error. Banned
+# words appear legitimately in quotations, "significant" is right next to a
+# p-value, and a low sentence-length CV can just be a short methods section.
+# Every finding means one thing: a human should look at this line.
+#
+# The vocabulary tables and thresholds live at the top of this file; the
+# authority for them is skills/writing/references/style.md.
+
+# Environments whose content is not English prose. Everything inside is blanked
+# before any statistic is computed, so a table of numbers cannot masquerade as
+# a very long sentence.
+_NON_PROSE_ENVS = (
+    "equation", "align", "alignat", "gather", "multline", "eqnarray",
+    "displaymath", "math", "array", "matrix", "tabular", "tabularx",
+    "tabulary", "verbatim", "lstlisting", "minted", "algorithm",
+    "algorithmic", "algorithmicx", "tikzpicture", "pgfpicture",
+    "thebibliography",
+)
+_ENV_ALT = "|".join(_NON_PROSE_ENVS)
+_DROP_ENV_RE = re.compile(
+    r"\\begin\{(?:%s)\*?\}.*?\\end\{(?:%s)\*?\}" % (_ENV_ALT, _ENV_ALT), re.S)
+_COMMENT_RE = re.compile(r"(?<!\\)%.*$", re.M)
+_DISPLAY_MATH_RE = re.compile(r"\$\$.*?\$\$|\\\[.*?\\\]", re.S)
+_INLINE_MATH_RE = re.compile(r"(?<!\\)\$(?:\\.|[^$\\])*\$", re.S)
+_SECTION_BOUNDARY_RE = re.compile(r"\\(?:chapter|section)\*?\s*\{([^{}]*)\}")
+_SECTION_TITLE_RE = re.compile(
+    r"\\(?:chapter|section|subsection|subsubsection|paragraph|title)\*?"
+    r"\s*\{[^{}]*\}")
+_DROP_ARG_CMD_RE = re.compile(
+    r"\\(?:cite[a-zA-Z]*|[a-zA-Z]*ref|label|input|include(?:graphics)?|"
+    r"bibliography(?:style)?|addbibresource|url|href|usepackage|documentclass)"
+    r"\s*(?:\[[^\]]*\])?\s*(?:\{[^{}]*\})*")
+_ESCAPED_CHAR_RE = re.compile(r"\\[^a-zA-Z\s]")
+_ANY_CMD_RE = re.compile(r"\\[a-zA-Z@]+\*?\s*(?:\[[^\]]*\])?")
+_TEX_PUNCT_RE = re.compile(r"[{}&~]")
+
+# `---` is the LaTeX em dash; `--` is an en dash and is fine.
+EM_DASH_RE = re.compile(r"(?<!-)---(?!-)|\u2014")
+WORD_RE = re.compile(r"[A-Za-z0-9]+(?:['\u2019-][A-Za-z0-9]+)*")
+NOT_ONLY_RE = re.compile(r"\bnot\s+only\b[\s\S]{0,160}?\bbut\s+also\b", re.I)
+_SENTENCE_END_RE = re.compile(r"[.!?][\"'\u2019)\]]*(?=\s|$)")
+
+# Trailing dots that are not sentence ends. Single letters (initials, "Fig. 4"
+# after masking) are handled separately.
+_ABBREVIATIONS = {
+    "e.g", "i.e", "cf", "vs", "al", "et al", "etc", "fig", "figs", "eq",
+    "eqs", "sec", "secs", "tab", "tbl", "ref", "refs", "approx", "resp",
+    "dr", "prof", "st", "vol", "pp", "no", "nos", "inc", "ltd", "ca",
+}
+
+
+def _blank_token(match):
+    """Blank a math span but leave one placeholder character.
+
+    The formula then still counts as exactly one word in the length statistics,
+    instead of either vanishing or exploding into loose symbols.
+    """
+    blanked = _blank(match)
+    if blanked.startswith(" "):
+        return "x" + blanked[1:]
+    return blanked
+
+
+def _tex_prose(text):
+    """Blank everything that is not English prose, preserving offsets.
+
+    The returned string has the same length and line structure as `text`, so a
+    match position maps straight back to a line number in the original file
+    (and to the same span of the original source, which the weasel-word check
+    uses to look for numbers that were masked out of the prose).
+
+    Returns (prose, sections) where sections is [(title, offset)].
+    """
+    masked = _COMMENT_RE.sub(_blank, text)
+    masked = _DROP_ENV_RE.sub(_blank, masked)
+    masked = _DISPLAY_MATH_RE.sub(_blank, masked)
+    masked = _INLINE_MATH_RE.sub(_blank_token, masked)
+    sections = [(m.group(1).strip(), m.start())
+                for m in _SECTION_BOUNDARY_RE.finditer(masked)]
+    masked = _SECTION_TITLE_RE.sub(_blank, masked)
+    masked = _DROP_ARG_CMD_RE.sub(_blank, masked)
+    masked = _ESCAPED_CHAR_RE.sub(_blank, masked)
+    masked = _ANY_CMD_RE.sub(_blank, masked)
+    return _TEX_PUNCT_RE.sub(" ", masked), sections
+
+
+def _is_abbreviation(text, dot_index):
+    m = re.search(r"([A-Za-z][A-Za-z.]*)$", text[:dot_index])
+    if m is None:
+        return False
+    word = m.group(1).lower().strip(".")
+    return len(word) <= 1 or word in _ABBREVIATIONS
+
+
+def _split_sentences(prose):
+    """Return [(start, end)] spans of prose sentences (offsets into `prose`)."""
+    spans = []
+    start = 0
+    for m in _SENTENCE_END_RE.finditer(prose):
+        if _is_abbreviation(prose, m.start()):
+            continue
+        chunk = prose[start:m.end()]
+        if chunk.strip():
+            spans.append((start + len(chunk) - len(chunk.lstrip()),
+                          start + len(chunk.rstrip())))
+        start = m.end()
+    tail = prose[start:]
+    if tail.strip():
+        spans.append((start + len(tail) - len(tail.lstrip()),
+                      start + len(tail.rstrip())))
+    return spans
+
+
+def _word_count(text):
+    return len(WORD_RE.findall(text))
+
+
+def _cv(values):
+    """Coefficient of variation (population std / mean), or None if undefined."""
+    if len(values) < 2:
+        return None
+    mean = sum(values) / len(values)
+    if mean <= 0:
+        return None
+    variance = sum((v - mean) ** 2 for v in values) / len(values)
+    return math.sqrt(variance) / mean
+
+
+def _paragraph_lengths(prose):
+    """Word counts of the prose paragraphs (blank-line separated)."""
+    lengths = []
+    for block in re.split(r"\n[ \t]*\n", prose):
+        count = _word_count(block)
+        if count >= MIN_WORDS_PER_PARAGRAPH:
+            lengths.append(count)
+    return lengths
+
+
+def _term_pattern(term, inflect):
+    """Compile a term to a regex: whitespace is flexible, inflections optional."""
+    tokens = [re.escape(t) for t in re.split(r"[\s_]+", term.strip()) if t]
+    if not tokens:
+        return None
+    body = r"\s+".join(tokens)
+    if inflect and len(tokens) == 1:
+        body += r"(?:s|es|ed|d|ing|ly)?"
+    return re.compile(r"\b%s\b" % body, re.I)
+
+
+def _compile_terms(mapping, check, inflect=True):
+    compiled = []
+    for term, note in mapping.items():
+        pattern = _term_pattern(term, inflect)
+        if pattern is not None:
+            compiled.append((pattern, term, note, check))
+    return compiled
+
+
+def _variant_pattern(term):
+    """Match a key term plus its hyphen/space/case variants.
+
+    "scale-to-zero" also matches "scale to zero", "Scale-To-Zero", "scale_to_
+    zero" — which is the point: mixing them is the drift we report.
+    """
+    tokens = [re.escape(t) for t in re.split(r"[\s_-]+", term.strip()) if t]
+    if not tokens:
+        return None
+    return re.compile(r"\b" + r"[\s_-]*".join(tokens) + r"\b", re.I)
+
+
+def _variant_form(matched):
+    """Normalize a match for comparison: collapse whitespace, unshift the case.
+
+    Lowercasing only the first character keeps a sentence-initial "Scale-to-
+    zero" from counting as drift, while "scale-to-Zero" still does.
+    """
+    form = re.sub(r"\s+", " ", matched.strip())
+    return form[:1].lower() + form[1:]
+
+
+def _line_of(prose, pos):
+    return prose.count("\n", 0, pos) + 1
+
+
+def tool_style_lint(args):
+    """Lint the prose of a manuscript's .tex sources against style.md.
+
+    Args: manuscript_dir (scanned recursively for *.tex), optional key_terms
+    (checked for case/hyphen drift) and extra_banned (extra words to flag).
+
+    Checks: banned words, LLM-tell vocabulary, em-dash density, sentence- and
+    paragraph-length uniformity per section, repeated "not only ... but also",
+    weasel words with no number in their sentence, terminology drift.
+
+    FLAG-ONLY, like trace_check: a hit is NOT an error and nothing here should
+    be "fixed" mechanically. Banned words appear inside quotations, a low CV
+    can be a genuinely short section, and "significant" is correct beside its
+    statistical test. A finding means one thing: a human has to read that line.
+    """
+    manuscript_dir = os.path.abspath(os.path.expanduser(args["manuscript_dir"]))
+    if not os.path.isdir(manuscript_dir):
+        return {"ok": False,
+                "error": f"manuscript_dir not found: {manuscript_dir}"}
+
+    key_terms = args.get("key_terms") or []
+    if isinstance(key_terms, str):
+        key_terms = [key_terms]
+    extra_banned = args.get("extra_banned") or []
+    if isinstance(extra_banned, str):
+        extra_banned = [extra_banned]
+
+    tex_files = _walk_files(manuscript_dir, (".tex",))
+    if not tex_files:
+        return {"ok": False,
+                "error": f"no .tex files found under {manuscript_dir}"}
+
+    term_checks = (
+        _compile_terms(BANNED_TERMS, "banned")
+        + _compile_terms(LLM_TELL_TERMS, "llm_tell")
+        + _compile_terms({t: "listed in extra_banned" for t in extra_banned},
+                         "banned")
+    )
+    weasel_checks = _compile_terms(WEASEL_TERMS, "unquantified_claim")
+    variant_checks = [(t, _variant_pattern(t)) for t in key_terms]
+
+    findings = []
+    warnings = []
+    words = sentences = em_dashes = 0
+    sentence_cv = {}
+    paragraph_cv = {}
+    not_only_hits = []
+    term_forms = {t: {} for t in key_terms}
+
+    for tex in tex_files:
+        try:
+            source = _read_capped(tex)
+        except OSError as e:
+            warnings.append(f"could not read {tex}: {e}")
+            continue
+        rel = os.path.relpath(tex, manuscript_dir)
+        prose, sections = _tex_prose(source)
+        lines = source.split("\n")
+
+        def at(pos, note, check, text=None, _rel=rel, _prose=prose, _lines=lines):
+            line = _line_of(_prose, pos)
+            return {
+                "check": check,
+                "file": _rel,
+                "line": line,
+                "text": text if text is not None else _context(_lines[line - 1]),
+                "note": note,
+            }
+
+        words += _word_count(prose)
+        spans = _split_sentences(prose)
+        sentences += len(spans)
+        em_dashes += len(EM_DASH_RE.findall(prose))
+
+        # 1. banned words and LLM tells
+        for pattern, term, note, check in term_checks:
+            for m in pattern.finditer(prose):
+                findings.append(at(m.start(), f'"{term}": {note}', check))
+
+        # 2. weasel words with no number in the same sentence. The number is
+        #    looked for in the original source span, so `$2.5\times$` counts.
+        starts = [s for s, _e in spans]
+        for pattern, term, note, check in weasel_checks:
+            for m in pattern.finditer(prose):
+                i = bisect.bisect_right(starts, m.start()) - 1
+                if i >= 0:
+                    s, e = spans[i]
+                else:  # pragma: no cover — a match always sits in a sentence
+                    s, e = m.start(), m.end()
+                if re.search(r"\d", source[s:e]):
+                    continue
+                findings.append(at(
+                    m.start(), f'"{term}" with no number in the sentence: {note}',
+                    check))
+
+        # 3. "not only ... but also" — style.md allows one per paper
+        for m in NOT_ONLY_RE.finditer(prose):
+            not_only_hits.append(at(m.start(), "", "not_only_but_also"))
+
+        # 4. terminology drift
+        for term, pattern in variant_checks:
+            if pattern is None:
+                warnings.append(f"ignored empty key_term: {term!r}")
+                continue
+            for m in pattern.finditer(prose):
+                form = _variant_form(m.group(0))
+                term_forms[term].setdefault(form, []).append(
+                    at(m.start(), "", "terminology_drift"))
+
+        # 5. per-section uniformity
+        bounds = [(title, off) for title, off in sections]
+        if bounds and bounds[0][1] > 0:
+            bounds.insert(0, ("(front matter)", 0))
+        if not bounds:
+            bounds = [("(whole file)", 0)]
+        for i, (title, off) in enumerate(bounds):
+            end = bounds[i + 1][1] if i + 1 < len(bounds) else len(prose)
+            chunk = prose[off:end]
+            name = f"{rel} \u00a7 {title}" if title else rel
+            lengths = [_word_count(chunk[s - off:e - off])
+                       for s, e in _split_sentences(chunk)]
+            lengths = [n for n in lengths if n >= 3]
+            if len(lengths) >= MIN_SENTENCES_FOR_CV:
+                cv = _cv(lengths)
+                if cv is not None:
+                    sentence_cv[name] = round(cv, 3)
+                    if cv < SENTENCE_CV_MIN:
+                        findings.append(at(off, (
+                            f"sentence-length CV {cv:.2f} over {len(lengths)} "
+                            f"sentences (mean {sum(lengths) / len(lengths):.1f} "
+                            f"words) is below {SENTENCE_CV_MIN} — uniform "
+                            "sentence shape reads as generated; vary it"),
+                            "sentence_uniformity"))
+            para = _paragraph_lengths(chunk)
+            if len(para) >= MIN_PARAGRAPHS_FOR_CV:
+                cv = _cv(para)
+                if cv is not None:
+                    paragraph_cv[name] = round(cv, 3)
+                    if cv < PARAGRAPH_CV_MIN:
+                        findings.append(at(off, (
+                            f"paragraph-length CV {cv:.2f} over {len(para)} "
+                            f"paragraphs (mean {sum(para) / len(para):.1f} "
+                            f"words) is below {PARAGRAPH_CV_MIN} — evenly "
+                            "sized paragraphs read as generated"),
+                            "paragraph_uniformity"))
+
+    # 6. "not only ... but also" is only a finding when it repeats
+    if len(not_only_hits) > 1:
+        for hit in not_only_hits:
+            hit["note"] = (f'"not only ... but also" appears '
+                           f"{len(not_only_hits)} times; style.md allows one "
+                           "per paper")
+            findings.append(hit)
+
+    # 7. terminology drift is only a finding when the forms actually mix
+    for term, forms in term_forms.items():
+        if len(forms) < 2:
+            continue
+        canonical = _variant_form(term)
+        if canonical not in forms:
+            canonical = max(sorted(forms), key=lambda f: len(forms[f]))
+        inventory = ", ".join(f"{f} ({len(forms[f])})"
+                              for f in sorted(forms, key=lambda f: -len(forms[f])))
+        for form, hits in forms.items():
+            if form == canonical:
+                continue
+            for hit in hits:
+                hit["note"] = (f'"{form}" vs "{canonical}": one term per '
+                               f"concept — forms in use: {inventory}")
+                findings.append(hit)
+
+    em_dash_per_1k = round(em_dashes * 1000 / words, 2) if words else 0.0
+    if words >= MIN_WORDS_FOR_DENSITY and em_dash_per_1k > EM_DASH_PER_1K_LIMIT:
+        findings.append({
+            "check": "em_dash_density",
+            "file": None,
+            "line": None,
+            "text": f"{em_dashes} em dashes in {words} words",
+            "note": (f"{em_dash_per_1k} per 1000 words exceeds "
+                     f"{EM_DASH_PER_1K_LIMIT} — the em dash as universal "
+                     "punctuation is an LLM tell; use commas, colons, "
+                     "parentheses, or a full stop"),
+        })
+
+    findings.sort(key=lambda f: (f["check"], f["file"] or "", f["line"] or 0))
+    by_check = {}
+    for f in findings:
+        by_check[f["check"]] = by_check.get(f["check"], 0) + 1
+    breakdown = ", ".join(f"{k} {v}" for k, v in sorted(by_check.items()))
+    summary = (
+        f"{len(findings)} finding(s) over {words} words in "
+        f"{len(tex_files)} .tex file(s)"
+        + (f" — {breakdown}." if breakdown else ".")
+        + " Flag-only: a hit is not automatically an error, it is a line a "
+          "human has to look at."
+    )
+
+    result = {
+        "ok": True,
+        "stats": {
+            "words": words,
+            "sentences": sentences,
+            "em_dash_per_1k": em_dash_per_1k,
+            "sentence_cv_by_section": sentence_cv,
+            "paragraph_cv_by_section": paragraph_cv,
+        },
+        "findings": findings[:MAX_STYLE_FINDINGS],
+        "summary": summary,
+        "scanned": {
+            "tex_files": [os.path.relpath(p, manuscript_dir) for p in tex_files],
+        },
+        "note": ("Heuristic and flag-only: a hit is NOT an error (banned words "
+                 "appear in quotations, 'significant' may sit beside its test, "
+                 "a low CV may just be a short section) — it only means a "
+                 "human should read that line. Rules follow "
+                 "skills/writing/references/style.md."),
+    }
+    if len(findings) > MAX_STYLE_FINDINGS:
+        result["truncated"] = True
+    if warnings:
+        result["warnings"] = warnings
+    return result
+
+
 # ---------------------------------------------------------------- MCP plumbing
 
 TOOLS = [
@@ -1131,6 +1656,35 @@ TOOLS = [
             "required": ["manuscript_dir"],
         },
         "handler": tool_trace_check,
+    },
+    {
+        "name": "style_lint",
+        "description": (
+            "Mechanical prose lint over the manuscript's .tex sources, "
+            "following skills/writing/references/style.md: banned words and "
+            "LLM-tell vocabulary, em-dash density per 1000 words, sentence- "
+            "and paragraph-length uniformity per section (a low coefficient of "
+            "variation is the generated-prose smell), 'not only ... but also' "
+            "used more than once, weasel words with no number in the same "
+            "sentence, and terminology drift across the case/hyphen variants of "
+            "key_terms ('scale-to-zero' vs 'scale to zero'). LaTeX comments, "
+            "math, tables, and listings are excluded before anything is "
+            "counted. Returns stats, and each finding with file, line, the "
+            "line's text, and a note. Heuristic and flag-only: a hit is NOT an "
+            "error (banned words appear in quotations, 'significant' may sit "
+            "beside its statistical test) — it means a human should read that "
+            "line. Run it before the review loop, alongside trace_check."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "manuscript_dir": {"type": "string", "description": "Directory holding the .tex sources (scanned recursively)"},
+                "key_terms": {"type": "array", "items": {"type": "string"}, "description": "Terms to check for drift, e.g. [\"scale-to-zero\", \"cold start\"]; each is matched together with its hyphen/space/case variants"},
+                "extra_banned": {"type": "array", "items": {"type": "string"}, "description": "Additional words or phrases to flag, on top of the built-in style.md lists; single words also match their -s/-ed/-ing inflections"},
+            },
+            "required": ["manuscript_dir"],
+        },
+        "handler": tool_style_lint,
     },
 ]
 
@@ -1353,6 +1907,172 @@ def _self_test():
                 self.assertTrue(any("not found" in w
                                     for w in orphan["warnings"]))
 
+    class StyleLintHelperTests(unittest.TestCase):
+        def test_prose_extraction_drops_comments_math_and_commands(self):
+            tex = (
+                "% banned word: obviously, in a comment\n"
+                "\\section{Design of the Cache}\n"
+                "We \\emph{reduce} tail latency~\\cite{smith2019}.\n"
+                "\\begin{tabular}{lr}\n"
+                "obviously & 1 \\\\\n"
+                "\\end{tabular}\n"
+                "The bound $\\alpha \\leq 3$ holds.\n")
+            prose, sections = _tex_prose(tex)
+            self.assertEqual(len(prose), len(tex))
+            self.assertEqual(prose.count("\n"), tex.count("\n"))
+            self.assertNotIn("obviously", prose)     # comment and table gone
+            self.assertNotIn("Design of the Cache", prose)
+            self.assertNotIn("smith2019", prose)
+            self.assertIn("reduce", prose)           # \emph argument kept
+            self.assertIn("The bound x", prose)      # math is one token
+            self.assertEqual(sections, [("Design of the Cache", tex.index("\\section"))])
+
+        def test_sentence_split_respects_abbreviations(self):
+            prose = ("We ran the test, e.g. on ARM. Latency fell by 12 ms. "
+                     "Fig. 3 shows the tail!")
+            texts = [prose[s:e] for s, e in _split_sentences(prose)]
+            self.assertEqual(texts, [
+                "We ran the test, e.g. on ARM.",
+                "Latency fell by 12 ms.",
+                "Fig. 3 shows the tail!",
+            ])
+
+        def test_cv_is_zero_for_uniform_lengths(self):
+            self.assertEqual(_cv([20, 20, 20, 20]), 0.0)
+            self.assertIsNone(_cv([7]))
+            self.assertIsNone(_cv([]))
+            self.assertAlmostEqual(_cv([10, 20]), 0.5 / 1.5, places=6)
+            # A varied paper sits well above the threshold, a uniform one below.
+            self.assertGreater(_cv([6, 31, 12, 24, 9, 27, 15, 21]),
+                               SENTENCE_CV_MIN)
+            self.assertLess(_cv([20, 21, 22, 20, 21, 22, 20, 21]),
+                            SENTENCE_CV_MIN)
+
+        def test_em_dash_counts_latex_and_unicode_but_not_en_dash(self):
+            self.assertEqual(len(EM_DASH_RE.findall(
+                "a---b and c\u2014d over 4--8 workers")), 2)
+
+        def test_term_variant_matching_and_normalization(self):
+            pattern = _variant_pattern("scale-to-zero")
+            self.assertIsNotNone(pattern.search("we scale to zero here"))
+            self.assertIsNotNone(pattern.search("Scale-To-Zero mode"))
+            self.assertIsNone(pattern.search("scales to zero"))
+            # Sentence-initial capitals are not drift; internal capitals are.
+            self.assertEqual(_variant_form("Scale-to-zero"), "scale-to-zero")
+            self.assertEqual(_variant_form("scale to\nzero"), "scale to zero")
+            self.assertEqual(_variant_form("scale-to-Zero"), "scale-to-Zero")
+
+    class StyleLintToolTests(unittest.TestCase):
+        def lint(self, tex, **kwargs):
+            self.tmp = tempfile.TemporaryDirectory()
+            self.addCleanup(self.tmp.cleanup)
+            with open(os.path.join(self.tmp.name, "main.tex"), "w") as f:
+                f.write(tex)
+            out = tool_style_lint({"manuscript_dir": self.tmp.name, **kwargs})
+            self.assertTrue(out["ok"])
+            return out
+
+        def checks(self, out, name):
+            return [f for f in out["findings"] if f["check"] == name]
+
+        def test_banned_and_tell_words_are_flagged_with_line_and_context(self):
+            out = self.lint("intro\nThe design obviously leverages caching.\n"
+                            "% obviously in a comment does not count\n")
+            banned = self.checks(out, "banned")
+            tells = self.checks(out, "llm_tell")
+            self.assertEqual([(f["line"], f["file"]) for f in banned],
+                             [(2, "main.tex")])
+            self.assertIn("obviously", banned[0]["note"])
+            self.assertIn("The design obviously", banned[0]["text"])
+            self.assertEqual([f["line"] for f in tells], [2])
+            self.assertIn("leverage", tells[0]["note"])
+
+        def test_weasel_word_is_exempt_when_the_sentence_has_a_number(self):
+            out = self.lint(
+                "Throughput improves significantly across the board. "
+                "Latency drops significantly, by $12.5$\\% on ARM.\n")
+            hits = self.checks(out, "unquantified_claim")
+            self.assertEqual(len(hits), 1)
+            self.assertIn("significant", hits[0]["note"])
+            self.assertIn("across the board", hits[0]["text"])
+
+        def test_not_only_but_also_needs_a_repeat_to_be_flagged(self):
+            once = "The cache not only hides latency but also saves energy.\n"
+            self.assertEqual(self.checks(self.lint(once), "not_only_but_also"), [])
+            twice = self.lint(once + "It not only scales but also degrades well.\n")
+            hits = self.checks(twice, "not_only_but_also")
+            self.assertEqual([f["line"] for f in hits], [1, 2])
+            self.assertIn("2 times", hits[0]["note"])
+
+        def test_terminology_drift_reports_the_variant_not_the_canonical(self):
+            out = self.lint(
+                "We use scale-to-zero here. Scale-to-zero is cheap. "
+                "The scale to zero path is slow.\n",
+                key_terms=["scale-to-zero"])
+            hits = self.checks(out, "terminology_drift")
+            self.assertEqual(len(hits), 1)
+            self.assertIn('"scale to zero" vs "scale-to-zero"', hits[0]["note"])
+            self.assertIn("scale-to-zero (2)", hits[0]["note"])
+            # A consistently spelled term produces nothing.
+            clean = self.lint("Scale-to-zero works. We keep scale-to-zero.\n",
+                              key_terms=["scale-to-zero"])
+            self.assertEqual(self.checks(clean, "terminology_drift"), [])
+
+        def test_uniform_sentences_and_em_dash_density_are_warned_with_numbers(self):
+            uniform = ("The cache holds the hot set of keys for the current "
+                       "window and serves them --- quickly --- to the client. ")
+            varied = ("It works. The cache holds a small set of keys, and the "
+                      "eviction policy, which we tune per workload, decides "
+                      "which of them survive the next window boundary. ")
+            out = self.lint(uniform * 24 + "\n\n" + varied * 4 + "\n")
+            self.assertGreater(out["stats"]["words"], MIN_WORDS_FOR_DENSITY)
+            self.assertGreater(out["stats"]["em_dash_per_1k"],
+                               EM_DASH_PER_1K_LIMIT)
+            density = self.checks(out, "em_dash_density")
+            self.assertEqual(len(density), 1)
+            self.assertIn("em dashes in", density[0]["text"])
+            cv_hits = self.checks(out, "sentence_uniformity")
+            self.assertEqual(len(cv_hits), 1)
+            self.assertIn("sentence-length CV", cv_hits[0]["note"])
+            cv = out["stats"]["sentence_cv_by_section"]["main.tex \u00a7 (whole file)"]
+            self.assertLess(cv, SENTENCE_CV_MIN)
+
+        def test_extra_banned_and_per_section_stats(self):
+            out = self.lint(
+                "\\section{Method}\nWe hibernate the agent.\n"
+                "\\section{Results}\nThe runtime hibernates it.\n",
+                extra_banned=["hibernate"])
+            hits = self.checks(out, "banned")
+            # The inflection is matched too, and the section title is not prose.
+            self.assertEqual([(f["line"], f["note"]) for f in hits],
+                             [(2, '"hibernate": listed in extra_banned'),
+                              (4, '"hibernate": listed in extra_banned')])
+            self.assertEqual(out["stats"]["sentences"], 2)
+            self.assertIn("Flag-only", out["summary"])
+            self.assertEqual(out["scanned"]["tex_files"], ["main.tex"])
+            # Sections too short for statistics are simply absent.
+            self.assertEqual(out["stats"]["sentence_cv_by_section"], {})
+
+        def test_error_paths(self):
+            with tempfile.TemporaryDirectory() as root:
+                missing = tool_style_lint(
+                    {"manuscript_dir": os.path.join(root, "nope")})
+                self.assertFalse(missing["ok"])
+                self.assertIn("not found", missing["error"])
+
+                empty = tool_style_lint({"manuscript_dir": root})
+                self.assertFalse(empty["ok"])
+                self.assertIn("no .tex files", empty["error"])
+
+        def test_clean_prose_produces_no_findings(self):
+            out = self.lint(
+                "\\section{Design}\n"
+                "The cache keeps the hot set in memory. When a request misses, "
+                "the loader fetches the value from the store and inserts it. "
+                "Eviction is least-recently-used.\n")
+            self.assertEqual(out["findings"], [])
+            self.assertEqual(out["stats"]["em_dash_per_1k"], 0.0)
+
     class FetchPaperTests(unittest.TestCase):
         """fetch_paper against a loopback server that mimics a hostile publisher."""
 
@@ -1427,7 +2147,7 @@ def _self_test():
         loader.loadTestsFromTestCase(case) for case in (
             ArxivRefTests, HtmlExtractionTests, NormalizationTests,
             TexExtractionTests, MatchingTests, TraceCheckToolTests,
-            FetchPaperTests))
+            StyleLintHelperTests, StyleLintToolTests, FetchPaperTests))
     runner = unittest.TextTestRunner(verbosity=2)
     return 0 if runner.run(suite).wasSuccessful() else 1
 
