@@ -53,7 +53,7 @@ resumes where you left off. Every stage is also a standalone skill under the
 | `skills/ideation` … `skills/publication` | One skill per stage, each usable standalone |
 | `agents/reviewer` | Simulated PC reviewer: 3 personas (domain expert, methods hawk, informed outsider), structured review form |
 | `agents/copyeditor` | In-place prose editor that enforces the style rulebook without touching technical content |
-| `mcp/paper_tools.py` | Zero-dependency MCP server: `latex_compile` · `render_figure` · `arxiv_search` · `scholar_search` · `dblp_bibtex` · `fetch_paper` (full text via arXiv HTML → ar5iv → PDF, with User-Agent fallback) · `trace_check` (flags every number in the .tex with no match in the evidence files — unmatched ≠ fabricated, but every unmatched value should have been looked at by a human) |
+| `mcp/paper_tools.py` | Zero-dependency MCP server: `latex_compile` · `render_figure` · `arxiv_search` · `scholar_search` · `dblp_bibtex` · `fetch_paper` (full text via arXiv HTML → ar5iv → PDF, with User-Agent fallback) · `trace_check` (flags every number in the .tex with no match in the evidence files — unmatched ≠ fabricated, but every unmatched value should have been looked at by a human) · `style_lint` (flags banned words and LLM tells, em-dash density, uniform sentence/paragraph length, unquantified claims, terminology drift — flag-only, a hit is a line a human has to look at, not an error) |
 
 ## Pipeline
 
