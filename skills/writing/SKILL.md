@@ -72,7 +72,7 @@ Write in this order; each step feeds the next:
   canonical sentence and the AI-disclosure rationale live in the finalize
   skill (§Pipeline acknowledgement). Single-blind or journal venue: write
   the Acknowledgements now, credit included. Double-blind: leave
-  acknowledgements out entirely; finalize adds the credit at camera-ready.
+  acknowledgements out entirely; publication (Stage 9) adds the credit at camera-ready.
 - `\cref` for all cross-references; labels `fig:/tab:/sec:/eq:/alg:`.
 
 ## Self-check before the gate

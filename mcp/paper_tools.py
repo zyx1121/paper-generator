@@ -52,7 +52,7 @@ USER_AGENT = f"{SERVER_NAME}/{SERVER_VERSION} (paper-generator Claude Code plugi
 #
 # EDIT HERE. `skills/writing/references/style.md` is the authority for every
 # table below: BANNED_TERMS mirrors its "Words → Banned" bullet, LLM_TELL_TERMS
-# its "Reads-as-LLM tells → Vocabulary / Structural tics" section, WEASEL_TERMS
+# its "Reads-as-LLM tells" section (corpus-verified vocabulary + structural tics), WEASEL_TERMS
 # its "Claims calibration → Quantify instead of qualify" rule. When a word is
 # added or dropped there, mirror the change here (and vice versa) — a lint that
 # drifts from the rulebook is worse than no lint. The thresholds below are
@@ -103,7 +103,7 @@ LLM_TELL_TERMS = {
     "seamless": "LLM-tell vocabulary — say what is actually automatic",
     "holistic": "LLM-tell vocabulary — say what is actually covered",
     "multifaceted": "LLM-tell vocabulary — name the facets",
-    "pivotal": "LLM-tell vocabulary — 'central' / cut",
+    "pivotal": "rate-limited in style.md — legitimate word, judge density",
     "crucial": "rate-limited in style.md — legitimate word, judge density",
     "paramount": "LLM-tell vocabulary — 'necessary for X' / cut",
     "meticulous": "LLM-tell vocabulary (corpus-verified) — rewrite plainly",

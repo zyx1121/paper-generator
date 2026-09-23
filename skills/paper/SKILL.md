@@ -132,7 +132,7 @@ Notes on flow:
   adjectives.
 - Stage 9 is event-driven: after finalize, the pipeline parks until real
   reviews or a decision arrive, then runs the matching branch (rebuttal /
-  revision / reject-and-revenue / camera-ready). Real reviews get the same
+  revision / reject / camera-ready). Real reviews get the same
   ledger discipline as simulated ones, and rule 1 holds under a rebuttal
   deadline.
 

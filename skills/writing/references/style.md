@@ -137,7 +137,7 @@ each as a lint error, weighted by evidence.
   lives in the verb and modifier layer, not in the technical nouns.
 - **Ban outright** (ornamental, with a plain replacement always available):
   delve, showcase, underscore, meticulous, commendable, intricate, garner,
-  realm, tapestry, testament, foster, elevate, navigate, vibrant,
+  realm, landscape (as metaphor), tapestry, testament, foster, elevate, navigate, vibrant,
   compelling, groundbreaking, seamless, holistic, multifaceted, paramount,
   leverage (→use), "valuable insights", "plays a vital role", "cannot be
   overstated", "marks a significant shift". The highest measured excess
