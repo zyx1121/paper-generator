@@ -1,58 +1,53 @@
 ---
 name: ideation
 description: >
-  Stage 1 of the paper pipeline: discuss and sharpen a raw research idea into
-  a proposal with one key insight, refutable contribution claims, and a
-  novelty scan against both the academic indexes and the field's
-  non-academic prior art. Use when starting a new paper or when the
-  current idea needs re-scoping.
+  Stage 1 of the paper pipeline: turn a raw research idea into an approved
+  proposal (key insight, refutable contribution claims, novelty scan). Use
+  when starting a new paper or when the current idea needs re-scoping.
 ---
 
-# Stage 1 — Ideation
+# Stage 1: Ideation
 
 Goal: turn a raw idea into `paper/proposal.md` the user signs off on.
-This stage is a conversation, not a monologue — short turns, real questions.
+This stage is a conversation: short turns, real questions.
 
 ## 1. Understand the idea
 
 Ask only what you cannot infer, in at most two rounds:
 
 - What problem does this solve, and for whom? What breaks today without it?
-- What is the suspected insight — the one thing that makes this work where
+- What is the suspected insight: the one thing that makes this work where
   prior approaches don't?
-- What resources exist? (testbed, GPUs, datasets, existing codebase, lab
-  infrastructure) — this bounds what kind of paper is feasible.
+- What resources exist (testbed, GPUs, datasets, existing codebase, lab
+  infrastructure)? This bounds what kind of paper is feasible.
 - Any constraints: deadline, target community, advisor preferences.
 
 ## 2. Novelty scan
 
-Before investing anything, check the idea against the literature.
-
-### 2a. Baseline scan — every field
+### 2a. Baseline scan (every field)
 
 - `arxiv_search` with 2–3 query formulations (problem phrasing, technique
   phrasing, fielded queries like `ti:"..." AND cat:cs.NI`), sorted by
   relevance and by `submittedDate` for the recent frontier.
-- `scholar_search` with the same queries — it covers published venues arXiv
+- `scholar_search` with the same queries: it covers published venues arXiv
   misses and returns citation counts; the high-citation hits are the prior
   work reviewers will expect to see cited and differentiated.
-- WebSearch for the obvious name of the idea plus "paper" — catches whatever
+- WebSearch for the obvious name of the idea plus "paper", for whatever
   both indexes miss.
-- For the 3–5 closest hits, go past the abstract: fetch the paper itself
-  with `fetch_paper` (it handles the arXiv→ar5iv→PDF fallbacks and
-  blocked-host retries) and read at least the introduction and
-  contributions. Then write one sentence each: what they do, and what this
-  idea does that they do not.
+- For the 3–5 closest hits, go past the abstract: fetch the paper with
+  `fetch_paper` and read at least the introduction and contributions. Then
+  write one sentence each: what they do, and what this idea does that they
+  do not.
 
-### 2b. Field-specific sources — do not skip
+### 2b. Field-specific sources
 
-The academic indexes are the floor of the scan, not the scan. Every field
+The academic indexes are the floor of the scan, not the scan: every field
 hides its closest prior work somewhere else. Pick the block matching the
 target field (same taxonomy as `skills/writing/references/venues/`; for
 anything outside it, run the nearest block) and search those sources too
 before declaring anything clear.
 
-**Systems / cloud** — industry ships before it publishes, so search code
+**Systems / cloud.** Industry ships before it publishes, so search code
 first:
 
 - GitHub search by topic and by stars (`topic:<keyword>`, sort by stars);
@@ -71,9 +66,8 @@ already written. An unpublished shim is still prior art to a reviewer.
 
 **ML**
 
-- arXiv restricted to the last 12 months, sorted by `submittedDate` — this
-  is where the field actually moves; a scan anchored on 3-year-old work is
-  not a scan.
+- arXiv restricted to the last 12 months, sorted by `submittedDate`; a
+  scan anchored on 3-year-old work misses where the field actually moves.
 - OpenReview, including rejected and withdrawn submissions: a rejected ICLR
   paper still establishes and date-stamps the idea.
 - Papers with Code, and the leaderboard page of whichever benchmark the
@@ -82,8 +76,8 @@ already written. An unpublished shim is still prior art to a reviewer.
 **Networking / mobile**
 
 - Standards documents: IEEE 802.11 amendments, 3GPP TSG specs and TRs, IETF
-  RFCs and drafts. Mechanisms are routinely standardized before — or
-  instead of — being published as papers.
+  RFCs and drafts. Mechanisms are routinely standardized before (or
+  instead of) being published as papers.
 - Public measurement datasets and testbed traces. An existing dataset can
   pre-empt a measurement contribution outright.
 
@@ -91,7 +85,7 @@ already written. An unpublished shim is still prior art to a reviewer.
 
 - CVE / NVD for the vulnerability class, and vendor security advisories for
   whether it is already known and patched.
-- DEF CON, Black Hat and CCC programs — practitioner venues disclose ahead
+- DEF CON, Black Hat and CCC programs: practitioner venues disclose ahead
   of the academic write-up.
 - Exploit databases (Exploit-DB, Metasploit modules) for whether a working
   attack is already public.
@@ -108,26 +102,22 @@ already written. An unpublished shim is still prior art to a reviewer.
 
 - ACM DL full-text search is the primary index here; arXiv coverage of
   CHI/UIST/CSCW is low, so an arXiv-first scan under-reports this field
-  (*uncertain: no coverage measurement taken — treat as a reason to add
+  (*uncertain: no coverage measurement taken; treat as a reason to add
   ACM DL, not as a number*).
 - UIST demo/poster tracks and video figures, for interaction techniques
   that never became full papers.
 
-### 2c. Failure modes
+### 2c. Recording and outcomes
 
-- **Scanning only the academic indexes.** The scan misses industry prior
-  art — repos, shims, internal systems written up as blog posts, standards
-  drafts — and novelty collapses later, when the paper is written and the
-  claim is expensive to retract. If the field's block above was not run,
-  the scan is incomplete; say so rather than reporting "clear".
-- **Not recording what was searched.** Record the scan in `proposal.md`:
-  sources queried, date, and what each ruled out. Later stages read it from
-  there — related work in Stage 6, the reviewer personas in Stage 7 — and
-  will re-derive it badly if it is missing.
+- If the field's block above was not run, the scan is incomplete; say so
+  rather than reporting "clear".
+- Record the scan in `proposal.md`: sources queried, date, and what each
+  ruled out. Related work (Stage 6) and the reviewer personas (Stage 7)
+  read it from there.
 
 Outcomes:
-- **Clear** — proceed.
-- **Close prior work exists** — tell the user plainly, propose a
+- Clear: proceed.
+- Close prior work exists: tell the user plainly, and propose a
   differentiated angle (new setting, new constraint, order-of-magnitude
   improvement) or recommend dropping it. Do not talk the user into a paper
   that is a rediscovery.
@@ -139,17 +129,15 @@ this sentence until it is sharp:
 
 > The main idea of this paper is ____.
 
-Then draft **contributions as refutable claims** — each one something a
+Then draft contributions as refutable claims: each one something a
 reviewer could check and potentially falsify, each one implying the evidence
 that will back it:
 
-- Bad: "We describe the WizWoz system. It is really cool."
-- Good: "We design X, the first Y that Z under constraint W (§3)."
-- Good: "X improves p99 latency by Nx over <best baseline> on <workloads> (§5)."
+- "We design X, the first Y that Z under constraint W (§3)."
+- "X improves p99 latency by Nx over <best baseline> on <workloads> (§5)."
 
-3–4 claims is typical. Every claim must be one the planned experiments can
-actually substantiate — if you cannot imagine the graph that proves a claim,
-cut or reword the claim now, not in Stage 6.
+3–4 claims is typical. If you cannot imagine the graph that proves a claim,
+cut or reword it now, not in Stage 6.
 
 ## 4. Write proposal.md
 

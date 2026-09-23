@@ -1,25 +1,23 @@
-# Phrasebook — attested sentences, by rhetorical move
+# Phrasebook: attested sentences, by rhetorical move
 
 [style.md](style.md) is a list of things not to write. This file is the
 positive half: real sentences from award-level papers, sorted by the move
-they perform, so a draft has something to imitate rather than only rules to
-avoid.
+they perform.
 
-**Read these for rhythm and shape**, not for wording: where the subject
-sits, how early the number lands, how far the verb commits, what the
-sentence refuses to claim. Shipping any line here verbatim is plagiarism and
-also bad writing — the terminology belongs to another paper. Keep the
-skeleton, replace every content word.
+Read these for rhythm and shape, not for wording: where the subject sits,
+how early the number lands, how far the verb commits, what the sentence
+refuses to claim. Keep the skeleton, replace every content word (see How
+to use one, at the end).
 
 Conventions used below:
 
 - Each line carries `(paper, venue — source)`. `venues/*.md` is the field
   profile in [venues/](venues/README.md); "research notes" is the
   2026-08-06 venue reading pass that those profiles were built from.
-- **An ellipsis inside a quote is the source's truncation, not the
-  paper's.** Those lines are sentence *stems*: the opening is attested, the
-  completion is yours. Nothing here was extrapolated into a full sentence
-  that no one wrote.
+- An ellipsis inside a quote is the source's truncation, not the paper's.
+  Those lines are sentence stems: the opening is attested, the completion
+  is yours. Nothing here was extrapolated into a full sentence that no one
+  wrote.
 - Fields are mixed inside every move on purpose. Take the line whose field
   matches your venue first; borrow across fields only for shape, and check
   the profile before importing another field's habit.
@@ -262,21 +260,20 @@ calibrated hedge per claim; never stack two.
 
 ## How to use one
 
-1. **One line per move, from your field first.** Pick the entry whose venue
+1. One line per move, from your field first. Pick the entry whose venue
    matches `paper/venue.md`; if the field has no entry for that move, take
    the closest one and check the profile before importing its habit. Do not
    assemble a paragraph out of five borrowed skeletons.
-2. **Rewrite to the profile's tone.** The same claim is a rounded
+2. Rewrite to the profile's tone. The same claim is a rounded
    multiplier at OSDI, a two-decimal percentage at ICDCS, a percentage with
    a denominator at S&P, and M/SD plus a test statistic at CHI. The move
    survives the translation; the number rhetoric does not.
-3. **Swap in your own terminology, then keep it.** Every content word from
-   the quoted line has to go. One term per concept for the whole paper
-   (see [style.md](style.md)) — a phrasebook line is the one place a
-   synonym is likely to sneak in.
-4. **Check the result against style.md, not against this file.** Attested
-   does not mean clean: these lines come from real papers, some of them
-   non-native, and where an idiom here collides with the ban list, the ban
-   list wins.
-5. **Never ship a line verbatim.** If the rewritten sentence still matches
-   its source on more than a few consecutive words, rewrite it again.
+3. Swap in your own terminology, then keep it. Every content word from
+   the quoted line has to go; one term per concept for the whole paper
+   (see [style.md](style.md)).
+4. Check the result against style.md, not against this file. Attested
+   does not mean clean: where an idiom here collides with the ban list,
+   the ban list wins.
+5. Never ship a line verbatim (that is plagiarism, and the terminology
+   belongs to another paper). If the rewritten sentence still matches its
+   source on more than a few consecutive words, rewrite it again.

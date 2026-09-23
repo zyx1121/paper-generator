@@ -8,9 +8,8 @@ drafting, and again as a checklist while revising.
 ## Sentences
 
 - **Active voice, whiteboard language.** "We ran 34 tests", not "34 tests
-  were run". "The ball moved sideways", not "the object under study was
-  displaced horizontally" (SPJ). Passive only when the agent is genuinely
-  irrelevant or to keep old information in subject position.
+  were run" (SPJ). Passive only when the agent is genuinely irrelevant or
+  to keep old information in subject position.
 - **"We" only for what the authors did.** The system is the actor for what
   the system does: "The analysis computes a graph", not "We compute a graph"
   (Ernst). Never anthropomorphize ("the program thinks").
@@ -29,7 +28,6 @@ drafting, and again as a checklist while revising.
 - **Singular over plural** (Ramsey): "Each lexical analyzer translates a
   regular expression into an automaton" — plurals hide whether the
   relationship is one-to-one or n-to-m.
-- Vary sentence length: short sentences state points; longer ones elaborate.
 - No contractions; no sentence-initial "And"; positive form ("forgot", not
   "did not remember").
 
@@ -60,16 +58,12 @@ drafting, and again as a checklist while revising.
   establishes novelty, not adjectives) · significant (unless statistical,
   with the test) · utilize (→use) · in order to (→to) · due to the fact
   that (→because) · etc. after e.g. · thing, stuff, a lot of · "for various
-  reasons" (give the reasons) · non-referential "this/that/it" — always
-  attach a noun ("this technique").
-- **Also banned, and now corpus-measurable** (see the LLM-tells section for
-  the evidence): delve into (→examine) · showcase (→show) · underscore
-  (→show, or drop the verb and state the fact) · enhance (→improve, with
-  the number) · garner (→receive) · intricate (→complex, or say how) ·
-  meticulous · commendable · realm · landscape (as metaphor). A second set
-  — crucial, comprehensive, insights, notably, particularly, additionally,
-  potential, robust — is **rate-limited, not banned**: each is a legitimate
-  academic word, and the marker is density, not presence.
+  reasons" (give the reasons) · non-referential "this/that/it" (always
+  attach a noun: "this technique") · self-characterizing words: honestly,
+  frankly, "we report honestly" (honesty shows in the content), and
+  provably unless a proof is cited.
+- LLM-tell vocabulary (ban outright vs. rate-limit, with the evidence) is
+  graded under Reads-as-LLM tells below.
 - "previous work" not "existing work"; "related work" never "related works";
   "that" for defining clauses, "which"+comma for non-defining; "whether" not
   "if" for alternatives.
@@ -102,6 +96,7 @@ drafting, and again as a checklist while revising.
   mean latency". A number is refutable; an adjective is not.
 - Scope every claim ("on these workloads", "for programs without
   reflection"). One calibrated hedge per claim, never stacked hedges.
+- Every "has been shown" needs a \cite; no "studies have shown" hand-waves.
 - State limitations yourself; venues instruct reviewers to reward that.
 
 ## Math and notation
@@ -113,45 +108,44 @@ drafting, and again as a checklist while revising.
   lowercase generic uses ("the previous section").
 - One symbol per concept, one concept per symbol; define at first use.
 
-## Reads-as-LLM tells — actively counter-program these
+## Reads-as-LLM tells
 
-> Tells verified: 2026-08-07 — lexical markers re-checked against the
+> Tells verified: 2026-08-07. Lexical markers re-checked against the
 > 2025–2026 corpus literature listed under Sources at the end of this
 > section.
 
-**This list has a half-life; read it the way the venue profiles ask you to
-read hard format facts** — a dated snapshot, not a rule. Every marker here
-is a statistical artifact of one model generation and of one moment in
-author behavior, and naming a marker publicly is what kills it: "delve"
-dropped sharply in arXiv abstracts within months of being called out in
-early 2024, while "significant", equally favored, kept climbing (Geng &
-Trotta 2025). Two consequences. First, re-verify against fresh corpus work
-when the model generation turns over; a list older than about a year is a
-lead, not a lint rule. Second, **absence of these words is not evidence of
-human prose** — Geng & Trotta recommend detectors watch for anomalous
-*declines* as well as excesses, so mechanical scrubbing produces its own
+This list has a half-life: read it like the venue profiles' hard format
+facts, as a dated snapshot. Each marker is an artifact of one model
+generation and one moment in author behavior, and naming a marker publicly
+kills it: "delve" dropped sharply in arXiv abstracts within months of being
+called out in early 2024, while "significant", equally favored, kept
+climbing (Geng & Trotta 2025). So re-verify against fresh corpus work when
+the model generation turns over (a list older than about a year is a lead,
+not a lint rule), and remember that absence of these words is not evidence
+of human prose: Geng & Trotta recommend detectors watch for anomalous
+declines as well as excesses, so mechanical scrubbing produces its own
 signature. Rewrite the sentence so the word was never needed.
 
-Because this prose is generated, reviewers and readers will be alert to
-these. Treat each as a lint error, but weight them by evidence.
+Because this prose is generated, reviewers will be alert to these. Treat
+each as a lint error, weighted by evidence.
 
-### Corpus-verified — measured frequency shifts in real academic corpora
+### Corpus-verified: measured frequency shifts in real academic corpora
 
 - **Audit verbs first.** Of the 379 excess style words in 2024 PubMed
   abstracts, 66% were verbs and 14% adjectives, a sharp break from the
   noun-dominated shifts of earlier years (Kobak et al. 2025). The tell
   lives in the verb and modifier layer, not in the technical nouns.
-- **Ban outright** — ornamental, with a plain replacement always available:
+- **Ban outright** (ornamental, with a plain replacement always available):
   delve, showcase, underscore, meticulous, commendable, intricate, garner,
-  realm, tapestry, testament, foster, elevate, navigate, vibrant,
+  realm, landscape (as metaphor), tapestry, testament, foster, elevate, navigate, vibrant,
   compelling, groundbreaking, seamless, holistic, multifaceted, paramount,
   leverage (→use), "valuable insights", "plays a vital role", "cannot be
   overstated", "marks a significant shift". The highest measured excess
   ratios in 2024 were *delves* (28×), *underscores* (14×), *showcasing*
   (11×) (Kobak et al. 2025); *delve*, *meticulous* and *commendable* show
   the same acceleration in Scopus abstracts (*Lexical Traces of AI*, 2026).
-- **Rate-limit, do not ban** — ordinary academic words whose *rate* is the
-  marker: across, additionally, comprehensive, crucial, enhance/enhancing,
+- **Rate-limit, do not ban** (ordinary academic words whose rate is the
+  marker): across, additionally, comprehensive, crucial, enhance/enhancing,
   exhibited, findings, insights, notably, particularly, pivotal, potential,
   robust, within (Kobak et al. 2025, common-word excess set). Each is
   defensible once, with a reason. Three in a paragraph is the tell, and the
@@ -162,7 +156,7 @@ these. Treat each as a lint error, but weight them by evidence.
   paper titles, and abstracts show depressed rates of "the" and "of"
   (*Beyond Via*, 2026). A title of the shape "X: Beyond Y via Z" now reads
   as generated on sight.
-- **Em dash — the strongest punctuation marker measured so far.** In
+- **Em dash: the strongest punctuation marker measured so far.** In
   medRxiv Discussion sections, prevalence rose from 4.2% pre-ChatGPT to
   8.0% in 2024 and 20.3% in 2025, with no comparable rise in boilerplate
   sections (Czuma 2026). Budget at most one per page, and only where a
@@ -170,12 +164,12 @@ these. Treat each as a lint error, but weight them by evidence.
   confirm `---` is not standing in where an en dash (ranges) or a hyphen
   (compound modifiers) belongs.
 
-### Decayed or contested — do not rely on these
+### Decayed or contested: do not rely on these
 
 - **delve** is now a weak discriminator: still avoid it, but its absence
   proves nothing (Geng & Trotta 2025). Much of this vocabulary has also
   diffused into ordinary human usage, including unscripted speech (Anderson
-  et al. 2025) — the marker set drifts toward the human baseline over time.
+  et al. 2025); the marker set drifts toward the human baseline over time.
 - **Hedging density is not the tell folklore claims.** LLM academic text
   shows *lower* interactional metadiscourse — hedges, boosters, attitude
   markers — than human writing, giving a flatter, more impersonal register
@@ -184,10 +178,10 @@ these. Treat each as a lint error, but weight them by evidence.
   AI tell. If anything, under-hedging is the newer risk.
 - **Sentence-initial "Moreover,/Furthermore,/Additionally," spam:** only
   *additionally* is corpus-verified; the other two are inherited folklore.
-  Cut all three anyway — they are lazy glue standing where an old-to-new
-  content link belongs.
+  Cut all three anyway: they stand where an old-to-new content link
+  belongs.
 
-### Structural tics — *observational*
+### Structural tics (observational)
 
 Repeatedly documented by practitioners and community style guides
 (Wikipedia's *Signs of AI writing*; Reinhart 2026), but not yet measured in
@@ -218,23 +212,21 @@ prose faults on their own merits rather than as detector evasion.
 - **Elegant variation** — synonym rotation driven by repetition penalties.
   Both an AI tell and a terminology-consistency bug; same term, every time.
 
-### Uniform prose shape — *observational*
+### Uniform prose shape (observational)
 
 Every sentence 18–25 words with one subordinate clause, every paragraph the
 same length, sentence openings drawn from one narrow set. Human academic
 prose is bursty. Vary length and construction deliberately, and let some
 sentences be short.
 
-- Every "has been shown" needs a \cite; no "studies have shown" hand-waves.
-
 ### What the publishers actually check
 
 Elsevier, Springer Nature, and IEEE all require disclosure of generative-AI
 use and hold the human authors accountable for every claim in the text;
 none of them publishes a reviewer checklist of textual tells. No list here
-is an official standard. What this section defends against is reviewer
-intuition and publisher screening tooling, both of which move faster than
-any published policy — and neither of which you get to argue with.
+is an official standard; this section defends against reviewer intuition
+and publisher screening tooling, both of which move faster than any
+published policy.
 
 ### Sources
 

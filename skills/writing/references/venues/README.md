@@ -37,8 +37,9 @@ old should be treated as a lead, not a rule.
 ## How profiles enter the pipeline
 
 1. **Setup (Stage 2)** — when the venue is chosen, record the matching
-   profile file in `paper/venue.md` (e.g. `profile: venues/systems.md`).
-   If no profile fits, say so in venue.md and fall back to structure.md
+   profile file in `paper/venue.md` (e.g.
+   `profile: skills/writing/references/venues/systems.md`). If no profile
+   fits, write `profile: none` with the reason and fall back to structure.md
    defaults.
 2. **Writing (Stage 6)** — read the chosen profile *after* structure.md;
    where they disagree, **the profile wins**. structure.md is the generic
