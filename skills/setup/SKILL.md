@@ -1,16 +1,15 @@
 ---
 name: setup
 description: >
-  Stage 2 of the paper pipeline: choose the target venue, scaffold the paper
-  workspace and LaTeX template, obtain experiment-environment access from the
-  user, and write the experiment plan (research questions, baselines,
-  metrics). Use after the proposal is approved.
+  Stage 2 of the paper pipeline: lock the target venue, the paper workspace
+  and LaTeX template, experiment-environment access, and the experiment
+  plan. Use after the proposal is approved.
 ---
 
-# Stage 2 — Setup
+# Stage 2: Setup
 
-Goal: everything the autonomous stages need — venue decision, workspace,
-environment access, and an experiment plan — approved at gate G2.
+Goal: everything the autonomous stages need (venue decision, workspace,
+environment access, experiment plan), approved at gate G2.
 
 ## 1. Venue
 
@@ -24,50 +23,47 @@ with the facts that matter, and recommend one:
 - fit: where the closest prior work was published is the strongest signal.
 
 Once the user picks, write `paper/venue.md` with the chosen venue's format
-facts and submission rules (anonymization requirements included — they shape
-the manuscript from day one). If the venue is double-blind, the manuscript is
-anonymous from the first draft.
+facts and submission rules, anonymization included: if the venue is
+double-blind, the manuscript is anonymous from the first draft.
 
-Also record the matching **venue profile** in `paper/venue.md` (e.g.
-`profile: skills/writing/references/venues/systems.md`) — pick from the
+Also record the matching venue profile in `paper/venue.md` (e.g.
+`profile: skills/writing/references/venues/systems.md`), picked from the
 index at `skills/writing/references/venues/README.md`. The profile drives
 field-specific structure (evaluation organization, related-work placement,
 signature sections, tone) in the writing and review stages. If no profile
 fits, write `profile: none` and note why.
 
-**Re-verify the profile's format facts against this year's CFP.** The profile
+Re-verify the profile's format facts against this year's CFP. The profile
 is a dated snapshot (see its `Facts verified:` line); hard format facts decay
 yearly while its structural and rhetorical advice does not. With the venue
 locked, walk the profile's format-facts section line by line against the live
 CFP and author guide and confirm each of: page limit and what counts toward
 it, column count and font size, template version/class, required checklists
 or statements, anonymization rules, and whether artifact evaluation exists
-plus its deadline. Record the verified values in `venue.md` — those, not the
+plus its deadline. Record the verified values in `venue.md`; those, not the
 profile, govern the manuscript. Report every difference you find as profile
 drift, and open a PR updating the profile's affected lines and its
 `Facts verified:` date.
 
-Record the venue's **artifact regime** in `venue.md` at the same time:
+Record the venue's artifact regime in `venue.md` at the same time:
 separate artifact evaluation with badges (typical for systems, security,
-SE — note the AE deadline relative to notification), checklist-tied code
+SE; note the AE deadline relative to notification), checklist-tied code
 release (ML), or none. Stage 8 prepares the package; knowing the regime
-now is what keeps `experiments/` provenance AE-ready instead of
-retrofitted.
+now keeps `experiments/` provenance AE-ready instead of retrofitted.
 
 ## 2. Workspace and template
 
 - Create the `paper/` layout from the orchestrator skill.
-- Set up `paper/manuscript/` with the venue's LaTeX class/style file
-  (download the official template), a `main.tex` split into
-  `sections/*.tex`, an empty `refs.bib`, and standard packages:
-  `booktabs`, `subcaption`, `hyperref` then `cleveref`, `graphicx`.
+- Set up `paper/manuscript/` with the venue's official LaTeX template, a
+  `main.tex` split into `sections/*.tex`, an empty `refs.bib`, and
+  `booktabs`, `subcaption`, `graphicx`, `hyperref` then `cleveref`.
 - Verify the toolchain immediately: run `latex_compile` on the skeleton.
   If no LaTeX toolchain exists on this machine, tell the user what to install
   (TeX Live + latexmk, or tectonic) before proceeding.
 
 ## 3. Environment access
 
-From here on you operate autonomously, so collect access **now**, not
+From here on you operate autonomously, so collect access now, not
 mid-experiment. Walk through what the plan needs and ask the user for each:
 
 - hardware: which machines/testbed/GPUs, how to reach them (SSH host aliases,
@@ -82,37 +78,37 @@ working. Record the inventory (not the secrets themselves) in `paper/plan.md`.
 
 Two lessons that cost real time when missed:
 
-- **Machines created later count too.** If the plan will create new machines
-  (VMs, containers, cloud instances), decide now how you will reach them —
-  network path, jump host, DNS — and verify the pattern with one probe.
+- Machines created later count too. If the plan will create new machines
+  (VMs, containers, cloud instances), decide now how you will reach them
+  (network path, jump host, DNS) and verify the pattern with one probe.
   A testbed you can build but not reach stalls the whole stage.
-- **Probe gently.** Repeated SSH connection attempts trip fail2ban and edge
+- Probe gently. Repeated SSH connection attempts trip fail2ban and edge
   rate limits, and getting banned mid-provisioning needs the user to rescue
   you. Back off between retries; never hammer a host in a loop.
 
 ## 4. Experiment plan
 
-Write the evaluation *before* building — it is the contract the
+Write the evaluation before building; it is the contract the
 implementation must satisfy. In `paper/plan.md`:
 
-- **Research questions.** RQ1..RQn, each mapping to one contribution claim
+- Research questions. RQ1..RQn, each mapping to one contribution claim
   from the proposal. Typical shape: end-to-end gain, where the gain comes
   from (ablation), scaling behavior, overheads.
-- **Baselines.** State of the art (authors' code where available, fairly
+- Baselines. State of the art (authors' code where available, fairly
   tuned), a naive baseline, and variants of our own system for ablations.
-  Every baseline gets a name — "baseline" is not one — plus an oracle upper
+  Every baseline gets a name ("baseline" is not one), plus an oracle upper
   bound wherever one exists.
-- **Workloads/datasets.** Prefer standard suites; no cherry-picking subsets.
-  Fix the workload list before the first result, not after.
-- **Metrics.** Justify each; means *and* tails (p99) for latency work;
-  accuracy *and* cost for ML work.
-- **Rigor budget.** Field-specific — see §4.1.
-- **Kill criteria.** For each RQ, what result would falsify the claim — and
+- Workloads/datasets. Prefer standard suites; no cherry-picked subsets.
+  Fix the workload list before the first result.
+- Metrics. Justify each; means and tails (p99) for latency work; accuracy
+  and cost for ML work.
+- Rigor budget. Field-specific, see §4.1.
+- Kill criteria. For each RQ, what result would falsify the claim, and
   what happens then (per the orchestrator: claims shrink or work loops
-  back). The *honest exit* is also field-specific: systems and networking
+  back). The honest exit is also field-specific: systems and networking
   shrink the claim to the regime that actually held (and say which regime);
-  ML reports the negative result with an analysis of why — these venues
-  instruct reviewers to reward stated limitations; SE keeps the RQ and
+  ML reports the negative result with an analysis of why (these venues
+  instruct reviewers to reward stated limitations); SE keeps the RQ and
   discloses the failure in Threats to Validity; security folds the failed
   path back into the threat model as a scope limit (*uncertain*: inferred
   from limitations-section candor, not a stated venue rule); HCI reframes
@@ -122,10 +118,8 @@ implementation must satisfy. In `paper/plan.md`:
 ### 4.1 Rigor budget by field
 
 Read the profile recorded in `paper/venue.md` first, then apply the row
-below; where the profile disagrees, **the profile wins**. Rigor currency is
-not universal — the run count that satisfies a systems reviewer is not what
-an ML reproducibility auditor asks for. `profile: none` → use the systems
-row as the floor. Each row: currency, how variance is shown, what must be
+below; where the profile disagrees, the profile wins. `profile: none` → use
+the systems row as the floor. Each row: currency, how variance is shown, what must be
 recorded from day 1, what `plan.md` carries beyond the generic bullets.
 
 - **Systems** — Currency: ≥5 runs per configuration; named baselines;
@@ -160,8 +154,8 @@ recorded from day 1, what `plan.md` carries beyond the generic bullets.
   failure analysis naming which cases failed and why. Variance: denominators
   and case tables carry the weight; internet-scale measurements get their
   own methodology (scan scope, opt-out handling). Day 1: attack scope, IRB /
-  human-subjects status. plan.md also carries: **the disclosure plan, fixed
-  before the experiments run** — if this work may find a new vulnerability,
+  human-subjects status. plan.md also carries: the disclosure plan, fixed
+  before the experiments run. If this work may find a new vulnerability,
   write down vendors, notification timeline, CVE handling, and embargo
   (USENIX expects disclosure at discovery time; undisclosed vulnerabilities
   without justification are grounds for rejection; S&P: 45–90 days before
@@ -171,8 +165,8 @@ recorded from day 1, what `plan.md` carries beyond the generic bullets.
   universal — the FSE'25 distinguished paper read has none); per-RQ
   statistics named up front (splits, folds, the statistical model).
   Variance: the named test plus effect size per RQ.
-  Day 1: build the **replication package alongside the code**, not after —
-  Verifiability and Transparency is one of ICSE's five review axes; log
+  Day 1: build the replication package alongside the code, not after
+  (Verifiability and Transparency is one of ICSE's five review axes); log
   reproduction deltas against the original papers as you hit them ("within
   2% except X, because Y"). plan.md also carries: the replication-package
   plan (what ships, where, how it runs) and the manual-judgment protocol
@@ -192,9 +186,9 @@ recorded from day 1, what `plan.md` carries beyond the generic bullets.
   Data/Code availability. Day 1: the data/code availability target and, for
   a conference extension, a running list of what is new. plan.md also
   carries: the explicit delta over the conference version
-  ("(a)… (b)… (c)…"). The delta bar is publisher-specific: **ACM journals
+  ("(a)… (b)… (c)…"). The delta bar is publisher-specific: ACM journals
   (TOCS) state a hard ≥25% new-content rule; IEEE (ToN, TPDS) has no
-  percentage** — ToN wants a cover letter explaining the difference, TPDS
+  percentage: ToN wants a cover letter explaining the difference, TPDS
   answers three named questions about the delta. Check the target journal's
   policy at venue lock, not at submission.
 

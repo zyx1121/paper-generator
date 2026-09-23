@@ -1,24 +1,17 @@
 # Paper diagram reference (architecture, state, flow)
 
-Data figures — plots generated from experiment data — are covered by the
-analysis skill. This reference covers the *drawn* figures: architecture and
+Data figures (plots generated from experiment data) are covered by the
+analysis skill. This reference covers the drawn figures: architecture and
 system diagrams, state machines, pipelines, and message-sequence charts,
 including the Figure 1 most systems papers open with.
 
 ## Tool: TikZ, versioned, compiled like everything else
 
-Draw diagrams in TikZ, not in an external drawing tool. Reasons:
-
-- Vector output with embedded fonts, typographically consistent with the
-  manuscript — a rasterized or mismatched-font diagram reads as sloppy at
-  review zoom.
-- The source lives in `paper/figures/<name>.tex`, versioned and diffable;
-  renaming a component is an edit, not a re-export.
-- The revision loop is fast and fully in-pipeline (see workflow below).
-
-For genuinely graph-shaped figures — dozens of nodes where the topology is
-the point — generate with graphviz (`dot -Tpdf`) instead. Below ~10 blocks,
-hand layout beats auto layout every time.
+Draw diagrams in TikZ, not an external drawing tool: vector output with
+the manuscript's fonts, and a source in `paper/figures/<name>.tex` that is
+versioned and diffable. For genuinely graph-shaped figures (dozens of
+nodes where the topology is the point), generate with graphviz
+(`dot -Tpdf`) instead; below ~10 blocks, hand layout wins.
 
 ## Workflow per diagram
 
@@ -26,9 +19,9 @@ hand layout beats auto layout every time.
    `\documentclass[tikz]{standalone}`.
 2. Compile it with `latex_compile` (`main_tex` = the diagram file) to get
    `<name>.pdf`.
-3. **Read the produced PDF and look at it.** Overlapping nodes, crowded
-   labels, arrows crossing text — the log will not tell you; your eyes will.
-   Iterate until clean; each cycle is seconds.
+3. Read the produced PDF and look at it: overlapping nodes, crowded
+   labels, arrows crossing text. The log will not tell you. Iterate until
+   clean.
 4. `\includegraphics` it from the manuscript like any other figure.
 
 A trivial one-off diagram may live inline as a `tikzpicture` in the section
@@ -50,11 +43,11 @@ sets another text font, load the same font package in the diagram preamble
 
 ## Field figure vocabulary
 
-The rules above are field-independent; *what* to draw, and how much of it, is
+The rules above are field-independent; what to draw, and how much of it, is
 not. The authority is the venue profile recorded in `paper/venue.md` (see
-`venues/README.md`) — where it disagrees with this section, the profile wins.
-This is the at-a-glance version for while you are drawing, and it covers data
-figures too, because the figure/table mix is one decision, not two.
+`venues/README.md`); where it disagrees with this section, the profile wins.
+This is the at-a-glance version, and it covers data figures too, because the
+figure/table mix is one decision, not two.
 
 **Systems** (OSDI, SOSP, ATC, EuroSys; ICDCS, Middleware). Figure 1 is an
 architecture overview or a motivating measurement, and must be comprehensible
@@ -119,24 +112,22 @@ strict IMRaD body.
 
 ## Style rules
 
-- **Define styles once** with a `block/.style` list in the picture options;
-  per-node ad-hoc styling drifts exactly like synonym rotation in prose.
+- Define styles once with a `block/.style` list in the picture options;
+  per-node ad-hoc styling drifts like synonym rotation in prose.
 - Font `\small` or `\footnotesize` at final physical size (design the figure
   at `\columnwidth` ≈ 3.3in, like data figures); never below `\scriptsize`.
-- Fills light, strokes dark, text black — same colorblind-safe palette as
+- Fills light, strokes dark, text black; same colorblind-safe palette as
   the data figures, and the distinction must survive grayscale (vary
   lightness, not just hue).
 - Arrows via `arrows.meta` (`-{Stealth}`). Label every arrow whose meaning
   is not obvious. If solid vs. dashed encodes a distinction (data vs.
   control path), state it in the caption.
-- Group related components with a dashed `fit` box and a small label —
-  machine, process, and trust boundaries earn their ink; decoration does not.
-- **No shadows, gradients, 3D, clipart, or icon packs.** Boxes, arrows,
-  text.
+- Group related components with a dashed `fit` box and a small label for
+  machine, process, and trust boundaries.
+- No shadows, gradients, 3D, clipart, or icon packs.
 - Number the steps of the main flow with small circled badges
   (`\node[circle, draw, inner sep=1pt, font=\scriptsize]`) and walk the same
-  numbers in prose: "the planner receives the query (①), …". This is what
-  makes Figure 1 carry the intro.
+  numbers in prose: "the planner receives the query (①), …".
 
 ## Worked example — block architecture
 
@@ -169,40 +160,22 @@ strict IMRaD body.
 \end{document}
 ```
 
-## State machines
+## State machines and message-sequence charts
 
-Use the `automata` library; label edges `event / action`:
-
-```latex
-\usetikzlibrary{automata, positioning, arrows.meta}
-% ...
-\begin{tikzpicture}[shorten >=1pt, node distance=2.6cm, auto,
-    every state/.style={font=\small, minimum size=2em}]
-  \node[state, initial]   (idle) {Idle};
-  \node[state]            (act) [right=of idle] {Active};
-  \node[state, accepting] (done) [right=of act] {Done};
-  \path[-{Stealth}]
-    (idle) edge node {req / alloc} (act)
-    (act)  edge [loop above] node {tick / renew} (act)
-    (act)  edge node {fin / free} (done);
-\end{tikzpicture}
-```
-
-## Message-sequence charts
-
-Hand-roll with the same primitives: one vertical dashed line per party
-(lifeline), horizontal `-{Stealth}` arrows for messages in time order,
-message names as `note`-style labels. Time flows down; number the messages
-if the prose walks through them.
+State machines: the `automata` library, edges labeled `event / action`.
+Message-sequence charts: hand-roll with the primitives above (one dashed
+lifeline per party, `-{Stealth}` arrows in time order flowing down,
+`note`-style labels), numbering messages if the prose walks through
+them.
 
 ## Self-check before placing in the manuscript
 
-- [ ] Read the compiled PDF at final size — labels legible, nothing
+- [ ] Read the compiled PDF at final size: labels legible, nothing
       overlaps, arrows don't cross text
 - [ ] survives grayscale; not readable by hue alone
 - [ ] every meaningful arrow labeled; solid/dashed distinction captioned
 - [ ] referenced from the text, with a prose walkthrough that follows the
       numbered steps
-- [ ] caption follows the field's convention — descriptive label or label
+- [ ] caption follows the field's convention: descriptive label, or label
       plus takeaway line (see field vocabulary above / the venue profile)
 - [ ] styles defined once; fonts not below `\scriptsize`; no decoration

@@ -7,23 +7,22 @@ description: >
   experiments.
 ---
 
-# Stage 4 — Experiments
+# Stage 4: Experiments
 
 Goal: every RQ in `paper/plan.md` answered with real, reproducible data under
 `paper/experiments/`, summarized in `results.md`.
 
-## Integrity — read first
+## Integrity
 
-**Every number in the paper traces to a file in this directory.** No result
+Every number in the paper traces to a file in this directory. No result
 may be estimated, extrapolated, interpolated from a partial run, or copied
-from a prior paper as if it were measured here. If a run failed, it is a
-failed run — rerun it or report the gap. This rule has no exceptions and no
-user override.
+from a prior paper as if it were measured here. A failed run is a failed
+run: rerun it or report the gap. No exceptions and no user override.
 
 ## Provenance per run
 
 One directory per run (or per sweep), self-describing. The tree below is an
-example — exact file names and formats are yours (`spec.yaml` / `env.json` /
+example; exact file names and formats are yours (`spec.yaml` / `env.json` /
 `raw.jsonl` are equally fine, match your harness) as long as every run
 carries all five: launch command, config + seed, environment snapshot,
 untouched raw output, parsed data.
@@ -39,11 +38,12 @@ experiments/
 └── results.md
 ```
 
-- Capture `env.txt` automatically in `run.sh` — `hostname`, `git -C src rev-parse HEAD`,
-  relevant `--version`s. Provenance written by hand gets forgotten.
-- **Never edit raw output.** Parsing produces new files next to it.
-- Repeat runs per the rigor budget in plan.md (≥5 for perf, ≥3 seeds for ML).
-  Discard warm-up iterations explicitly and note that you did.
+- Capture `env.txt` automatically in `run.sh` (`hostname`,
+  `git -C src rev-parse HEAD`, relevant `--version`s); hand-written
+  provenance gets forgotten.
+- Never edit raw output. Parsing produces new files next to it.
+- Repeat runs per the rigor budget in plan.md (setup §4.1). Discard
+  warm-up iterations explicitly and note that you did.
 
 ## Execution
 
@@ -62,12 +62,12 @@ For each RQ: which run directories answer it, the headline numbers with
 variance, and a one-sentence takeaway. Then an honest overall read:
 
 - Which contribution claims are now supported, and how strongly.
-- Which are **not** supported. Do not soften this. Per the orchestrator,
+- Which are not supported, stated without softening. Per the orchestrator,
   unsupported claims go back to the user: shrink the claim or loop back to
   strengthen the system.
 
 ## Gate G4
 
-Walk the user through results.md — supported claims, unsupported claims,
+Walk the user through results.md: supported claims, unsupported claims,
 surprises. The user decides: proceed to analysis/writing, or loop back.
 Record the decision in STATE.md.
