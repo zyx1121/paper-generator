@@ -10,7 +10,7 @@
   ⚡ Agent: reviewer × 3   → loop until all three accept (G6)
   ⚡ Skill: finalize       → submission PDF
   ⚡ Skill: publication    → rebuttal · camera-ready (G7, when the decision lands)
-✓ paper/manuscript/main.pdf, all three reviewers at accept
+✓ paper/<short-title>.pdf, all three reviewers at accept
 ```
 
 # paper-generator
