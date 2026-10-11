@@ -1,70 +1,23 @@
-```
-> /paper-generator:paper a gossip protocol that heals partitions without a coordinator
+<div align="center">
 
-  ⚡ Skill: ideation       → paper/proposal.md          (G1 proposal)
-  ⚡ Skill: setup          → venue + paper/plan.md      (G2 plan)
-  ⚡ Skill: implementation → paper/src/                 (G3 artifact)
-  ⚡ Skill: experiments    → paper/experiments/*.csv    (G4 results)
-  ⚡ Skill: analysis       → paper/figures/*.pdf
-  ⚡ Skill: writing        → paper/manuscript/main.tex  (G5 draft)
-  ⚡ Agent: reviewer × 3   → loop until all three accept (G6)
-  ⚡ Skill: finalize       → submission PDF
-  ⚡ Skill: publication    → rebuttal · camera-ready (G7, when the decision lands)
-✓ paper/<short-title>.pdf, all three reviewers at accept
-```
+<h1>paper-generator</h1>
 
-# paper-generator
+<p><strong>A Claude Code plugin that takes a research idea to a submitted paper, past 3 simulated reviewers.</strong></p>
 
-> Turn a raw research idea into a submitted paper, with three simulated reviewers standing between your draft and the deadline.
+[![CI](https://img.shields.io/github/actions/workflow/status/zyx1121/paper-generator/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/zyx1121/paper-generator/actions)
+[![Version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fzyx1121%2Fpaper-generator%2Fmain%2F.claude-plugin%2Fplugin.json&query=%24.version&label=version&style=flat-square)](.claude-plugin/plugin.json)
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-plugin-d97757?style=flat-square)](https://docs.anthropic.com/en/docs/claude-code/plugins)
+[![License](https://img.shields.io/github/license/zyx1121/paper-generator?style=flat-square)](LICENSE)
 
-`research` · `latex` · `peer-review` · `pipeline`
+**English** | [繁體中文](README.zh-TW.md) | [简体中文](README.zh-CN.md)
 
-[![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-d97757)](https://github.com/zyx1121/paper-generator) &nbsp;[![version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fzyx1121%2Fpaper-generator%2Fmain%2F.claude-plugin%2Fplugin.json&query=%24.version&label=version&color=111111)](.claude-plugin/plugin.json) &nbsp;[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](#license)
-
-Writing a paper end to end means playing a dozen roles at once: idea whisperer, experiment engineer, LaTeX typesetter, and your own harshest reviewer. This plugin plays all of them, but refuses to shortcut the part that matters: every number in the draft has to trace back to a real experiment run, and every draft has to survive a simulated program committee before it counts as done. And because every field has its own idea of what a paper looks like, the pipeline writes — and reviews — in the target venue's dialect, not a generic one.
-
-## Install
-
-```
-/plugin marketplace add zyx1121/paper-generator
-/plugin install paper-generator@paper-generator
-```
-
-> [!NOTE]
-> Needs **Python 3.9+** (`python3` on PATH, runs the bundled MCP server) and a
-> LaTeX toolchain (`latexmk` from TeX Live, or `tectonic`); the pipeline checks
-> and tells you what's missing. `matplotlib` for whatever Python your figure
-> scripts use. Optional `S2_API_KEY` (free, from
-> [semanticscholar.org/product/api](https://www.semanticscholar.org/product/api))
-> for richer `scholar_search` metadata; without it, results fall back to OpenAlex.
-
-Start with `/paper-generator:paper <your idea>` and talk it through. State persists
-in `paper/STATE.md`, so running the command with no arguments in a later session
-resumes where you left off. Every stage is also a standalone skill under the
-`paper-generator:` prefix: `ideation`, `setup`, `implementation`, `experiments`,
-`analysis`, `writing`, `review` (mock-review any draft), `finalize`,
-`publication` (rebuttal, revision, camera-ready — when real reviews arrive).
-
-## What it gives you
-
-| Component | What it does |
-|---|---|
-| `skills/paper` | Orchestrator: drives all 9 stages, the gates, the `paper/STATE.md` protocol |
-| `skills/ideation` … `skills/publication` | One skill per stage, each usable standalone |
-| `skills/writing/references/venues/` | **Venue profiles**: 7 field dialects (systems, networking, ML, security, SE, HCI, journals) distilled from close reads of 25+ award-level papers and live CFPs — structure, evaluation shape, tone, reviewer expectations, desk-reject triggers, per-field pipeline scope. Every hard format fact carries a `Facts verified:` date and gets re-checked against the live CFP at venue lock |
-| `skills/writing/references/` | The style rulebook: `structure.md` (generic skeleton the profile overrides), `style.md` (prose rules + evidence-graded LLM-tells list), `phrasebook.md` (attested sentences from award papers, by rhetorical move), `diagrams.md` (TikZ workflow + field figure vocabulary) |
-| `agents/reviewer` | Simulated PC reviewer: 3 personas specialized per venue profile (what a methods hawk hunts at NeurIPS ≠ at SOSP), fed the calibration file of blind spots real reviews exposed; B always runs a claim-verb calibration sweep |
-| `agents/copyeditor` | In-place prose editor: style rulebook + the venue profile's tone overlay, without touching technical content |
-| `mcp/paper_tools.py` | Zero-dependency MCP server: `latex_compile` · `render_figure` · `arxiv_search` · `scholar_search` · `dblp_bibtex` · `fetch_paper` (full text, arXiv → ar5iv → PDF fallbacks) · `trace_check` (numbers ↔ evidence audit, flag-only) · `style_lint` (banned words, LLM tells, uniformity, terminology drift — flag-only) |
-| `scripts/ci_checks.py` | Repo CI, runnable locally: links, cross-refs, plugin manifest, skill frontmatter, Python syntax, MCP self-tests |
-
-## Pipeline
+</div>
 
 ```mermaid
 flowchart LR
     idea([idea]) --> ideation
     ideation -->|"G1 proposal"| setup
-    setup -->|"G2 venue · plan"| implementation
+    setup -->|"G2 venue, plan"| implementation
     implementation -->|"G3 artifact"| experiments
     experiments -->|"G4 results"| analysis
     analysis --> writing
@@ -72,28 +25,84 @@ flowchart LR
     review -->|"G6 all accept"| finalize
     finalize -->|submit| publication
     publication -->|"G7 camera-ready"| pdf([doi])
-    review -.->|"must-fix → back to any stage"| implementation
-    publication -.->|"reject → harvest + re-venue"| review
+    review -.->|"must-fix: back to any stage"| implementation
+    publication -.->|"reject: harvest, new venue"| review
 ```
 
-Gates are hard stops: irreversible or judgment calls (proposal, venue + plan,
-implementation, results, draft, final sign-off) come to you with a
-recommendation attached. Everything between gates runs autonomously, and a
-must-fix from the review loop can send the pipeline back to any earlier stage.
+A paper from start to end needs many roles: the idea, the experiments, the LaTeX and a hard reviewer. This plugin plays all of them, but it does not skip the important part. Each number in the draft must come from a real experiment run, and each draft must pass a simulated program committee. It writes and reviews in the style of the target venue.
 
-## Principles baked in
+## Features
 
-- **No fabricated data, ever.** Every number in the paper traces to a real run under `paper/experiments/`, with per-run provenance (command, config, seed, environment, commit hash). No user override. Evidence the pipeline cannot produce (human subjects, vendor disclosure) is declared at the gate, never simulated.
-- **Claims are refutable.** Contributions are written as checkable claims, each forward-referenced to the evidence that substantiates it, and the review loop attacks exactly that mapping.
-- **Papers read like their field's papers.** The venue profile overrides the generic skeleton, reviewers judge by that field's own bar, and every profile fact is grounded in a primary source or marked *uncertain*.
-- **The loop learns.** Blind spots that real reviews expose go into `reviews/calibration.md`, and the next round's personas check them first.
+- **9 stages with gates**: the pipeline stops at 7 gates (G1 to G7) for your decision, with a recommendation. Between gates, it runs alone.
+- **No invented data**: each number traces to a run in `paper/experiments/`, with its command, config, seed, environment and commit.
+- **Venue styles**: 7 field profiles (systems, networking, ML, security, SE, HCI, journals) set the structure, the evaluation and the reviewer bar.
+- **Simulated reviewers**: 3 reviewer personas for each venue. The loop continues until all 3 accept.
+- **Resumes**: the state is in `paper/STATE.md`, so a later session continues where you stopped.
 
-## Contributing
+## Quick start
 
-Issues and PRs welcome: ground rules in [CONTRIBUTING.md](https://github.com/zyx1121/.github/blob/main/CONTRIBUTING.md).
-Run `python3 scripts/ci_checks.py` before pushing — it is the same set of
-checks CI runs.
+```
+/plugin marketplace add zyx1121/paper-generator
+/plugin install paper-generator@paper-generator
+```
+
+Then start a paper and talk it through:
+
+```
+/paper-generator:paper a gossip protocol that heals partitions without a coordinator
+```
+
+Run `/paper-generator:paper` with no idea to continue the paper in `paper/`.
+
+## Usage
+
+Each stage is also a skill with the `paper-generator:` prefix: `ideation`, `setup`, `implementation`, `experiments`, `analysis`, `writing`, `review`, `finalize` and `publication`. Use `review` to mock-review any draft, and `publication` for the rebuttal, the revision and the camera-ready copy.
+
+| Part | Does |
+|------|------|
+| `skills/paper` | Runs the 9 stages, the gates and the `paper/STATE.md` protocol |
+| `skills/writing/references/venues/` | The 7 venue profiles. Each format fact has a `Facts verified:` date and gets a new check against the live CFP |
+| `skills/writing/references/` | The style rules, a phrasebook from award papers, and the TikZ figure workflow |
+| `agents/reviewer` | A simulated reviewer with 3 personas for each venue profile |
+| `agents/copyeditor` | Edits prose for style and venue tone, and keeps the technical content |
+| `mcp/paper_tools.py` | MCP tools: `latex_compile`, `render_figure`, `arxiv_search`, `scholar_search`, `dblp_bibtex`, `fetch_paper`, `trace_check`, `style_lint` |
+
+## Configuration
+
+| Needs | For | Without it |
+|-------|-----|------------|
+| Python 3.9 or later as `python3` | the bundled MCP server | the tools do not start |
+| `latexmk` (TeX Live) or `tectonic` | PDF builds | the pipeline tells you what is missing |
+| `matplotlib` | figure scripts | no figures |
+| `S2_API_KEY` from [Semantic Scholar](https://www.semanticscholar.org/product/api) | better `scholar_search` data | results come from OpenAlex |
+
+## Limits
+
+- The pipeline cannot make evidence that needs people, such as user studies or vendor disclosure. It declares that evidence at the gate.
+- `trace_check` and `style_lint` only flag problems. They do not fix them.
+
+## For AI agents
+
+Facts for coding agents and LLM tools. The rules for changing the code are in [AGENTS.md](AGENTS.md).
+
+- **Summary**: Claude Code plugin with a 9-stage idea-to-paper pipeline, 7 gates, venue-specific style profiles, simulated reviewers and a stdlib MCP server.
+- **Type**: plugin
+- **Interfaces**: skills `paper-generator:<stage>`, agents `reviewer` and `copyeditor`, 8 MCP tools from `mcp/paper_tools.py`, state file `paper/STATE.md`
+- **Install**: `/plugin marketplace add zyx1121/paper-generator`, then `/plugin install paper-generator@paper-generator`
+- **Run**: `/paper-generator:paper <idea>`
+- **Verify**: `python3 scripts/ci_checks.py`
+- **Config**: env `S2_API_KEY` (optional)
+- **Secrets**: `S2_API_KEY` (optional)
+- **Limits**: needs Python 3.9 or later and `latexmk` or `tectonic`
+
+## Development
+
+```sh
+python3 scripts/ci_checks.py   # links, cross-references, manifest, frontmatter, Python syntax, MCP self-tests
+```
+
+CI runs the same script with no installs. The MCP server uses the standard library only.
 
 ## License
 
-[MIT](LICENSE) · the one section that skips peer review
+[MIT](LICENSE)
